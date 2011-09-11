@@ -76,6 +76,14 @@ class UserProfile implements Timestampable
      */
 	protected $albums;
 	
+        
+        
+    /**
+     * @ORM\ManyToMany(targetEntity="Wixet\WixetBundle\Entity\ProfileGroup", mappedBy="profiles")
+     */
+    protected $profile_groups;
+    
+    
 	/**
      * @var datetime $created
      *
@@ -92,4 +100,92 @@ class UserProfile implements Timestampable
      */
     private $updated;
     
+    public function getId() {
+        return $this->id;
+    }
+
+    public function getUser() {
+        return $this->user;
+    }
+
+    public function setUser($user) {
+        $this->user = $user;
+    }
+
+    public function getFirst_name() {
+        return $this->first_name;
+    }
+
+    public function setFirst_name($first_name) {
+        $this->first_name = $first_name;
+    }
+
+    public function getLast_name() {
+        return $this->last_name;
+    }
+
+    public function setLast_name($last_name) {
+        $this->last_name = $last_name;
+    }
+
+    public function getPublic() {
+        return $this->public;
+    }
+
+    public function setPublic($public) {
+        $this->public = $public;
+    }
+
+    public function getCity() {
+        return $this->city;
+    }
+
+    public function setCity($city) {
+        $this->city = $city;
+    }
+
+    public function getUpdates() {
+        return $this->updates;
+    }
+
+    public function setUpdates($updates) {
+        $this->updates = $updates;
+    }
+
+    public function getPrivate_messages_collections() {
+        return $this->private_messages_collections;
+    }
+
+    public function setPrivate_messages_collections($private_messages_collections) {
+        $this->private_messages_collections = $private_messages_collections;
+    }
+
+    public function getFavourites() {
+        return $this->favourites;
+    }
+
+    public function setFavourites($favourites) {
+        $this->favourites = $favourites;
+    }
+
+    public function getAlbums() {
+        return $this->albums;
+    }
+
+    public function setAlbums($albums) {
+        $this->albums = $albums;
+    }
+
+    public function getCreated() {
+        return $this->created;
+    }
+
+
+
+    public function getUpdated() {
+        return $this->updated;
+    }
+
+
+
 }

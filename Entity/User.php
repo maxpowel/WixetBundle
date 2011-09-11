@@ -33,12 +33,8 @@ class User extends BaseUser implements Timestampable
     /**
      * @ORM\OneToMany(targetEntity="Wixet\WixetBundle\Entity\UserProfile", mappedBy="user")
      */
-	protected $profiles;
+    protected $profiles;
 	
-	/**
-	 * @ORM\ManyToMany(targetEntity="Wixet\WixetBundle\Entity\GroupProfile", mappedBy="users")
-	 */
-	protected $group_profiles;
 
     /**
      * @ORM\ManyToMany(targetEntity="Wixet\WixetBundle\Entity\Group")

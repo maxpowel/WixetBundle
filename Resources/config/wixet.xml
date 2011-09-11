@@ -5,15 +5,17 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="wixet.permissions_manager.class">Wixet\WixetBundle\Service\PermissionsManager</parameter>
+        <parameter key="wixet.permission_manager.class">Wixet\WixetBundle\Service\PermissionManager</parameter>
         <parameter key="wixet.media_item_manager.class">Wixet\WixetBundle\Service\MediaItemManager</parameter>
         <parameter key="wixet.fetcher.class">Wixet\WixetBundle\Service\Fetcher</parameter>
     </parameters>
 
     <services>
         <!--- Annotation Metadata Driver Service -->
-        <service id="wixet.permissions_manager" class="%wixet.permissions_manager.class%">
+        <service id="wixet.permission_manager" class="%wixet.permission_manager.class%">
           <argument type="service" id="doctrine.orm.default_entity_manager" />
+          <argument>%wixet.config%</argument>
+          <argument type="service" id="database_connection" />
         </service>
         
         <service id="wixet.fetcher" class="%wixet.fetcher.class%">

@@ -3,7 +3,7 @@
 namespace Wixet\WixetBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
+///////////LO DE CUENTAS DE GRUPO//////////
 /**
  * @ORM\Entity
  * @ORM\Table(name="group_profile_type")

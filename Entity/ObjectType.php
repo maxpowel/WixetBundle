@@ -11,6 +11,19 @@ use Doctrine\ORM\Mapping as ORM;
 class ObjectType
 {
     
+    public function getId() {
+        return $this->id;
+    }
+
+    public function getName() {
+        return $this->name;
+    }
+
+    public function setName($name) {
+        $this->name = $name;
+    }
+
+        
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")

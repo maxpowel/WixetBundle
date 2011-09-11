@@ -12,6 +12,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  */
 class Album implements Timestampable
 {
+    
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
@@ -51,4 +52,41 @@ class Album implements Timestampable
      */
     private $updated;
     
+    public function getId() {
+        return $this->id;
+    }
+    
+    public function getProfile() {
+        return $this->profile;
+    }
+
+    public function setProfile($profile) {
+        $this->profile = $profile;
+    }
+
+    public function getTitle() {
+        return $this->title;
+    }
+
+    public function setTitle($title) {
+        $this->title = $title;
+    }
+
+    public function getPublic() {
+        return $this->public;
+    }
+
+    public function setPublic($public) {
+        $this->public = $public;
+    }
+
+    public function getCreated() {
+        return $this->created;
+    }
+
+
+    public function getUpdated() {
+        return $this->updated;
+    }
+
 }
