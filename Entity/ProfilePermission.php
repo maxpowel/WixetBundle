@@ -125,9 +125,10 @@ class ProfilePermission
      
      /**
      * @ORM\ManyToOne(targetEntity="Wixet\WixetBundle\Entity\Album")
-     * @ORM\JoinColumn(name="album_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="album_id", referencedColumnName="id", nullable=true)
      */
      protected $album;
+     //When the protected item is an Album, album is null
      
      /**
      * @ORM\ManyToOne(targetEntity="Wixet\WixetBundle\Entity\ObjectType")

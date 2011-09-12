@@ -48,24 +48,55 @@ class PermissionManager
 	}
         
         
-	public function addPermission($object,$identity,$readGranted,$writeGranted,$readDenied,$writeDenied, $album){
-            //TODO URGENTE hacer que sean grupos de PERFILES no de USUARIOS
-            
+	public function setPermission($object,$identity,$readGranted,$writeGranted,$readDenied,$writeDenied){            
 		//identity can be group or profile, album is a special object
                 //get real class when doctrine uses proxy
                 $identityClass = $this->doctrine->getClassMetadata(get_class($identity))->name;
-                $albumClass = $this->doctrine->getClassMetadata(get_class($object))->name;
-		
+                $objectClass = $this->doctrine->getClassMetadata(get_class($object))->name;
+		$permission = null;
+                $initPermission = false;
 	
-                    //Objeto normal, albumes incluidos
+                    //Add the permission
                     if($this->groupClass == $identityClass){
 			//Adding permission to a group
-			$permission = new GroupPermission();
-			$permission->setGroup($identity);
+                        //Check if permission already exists
+                        //Group permission on mediaItem
+			$query = $this->doctrine->createQuery('SELECT p FROM Wixet\WixetBundle\Entity\GroupPermission p '
+                                .' JOIN p.objectType t '
+                                .'WHERE p.realItemId = ?1 AND t.name = ?2');
+									  
+
+									  
+                        $query->setParameter(1,$object.getId());
+			$query->setParameter(2,$objectClass);
+                        try{
+                            $permission = $query->getSingleResult();
+                        }catch(\Exception $e){
+                            //Item does not have permissions
+                            $permission = new GroupPermission();
+                            $permission->setGroup($identity);
+                            $initPermission = true;
+                        }
                     }else if ($this->profileClass == $identityClass){
                             //Adding permission to a an profile
-                            $permission = new ProfilePermission();
-                            $permission->setProfile($identity);
+                            //Check if permission already exists
+                            //Profile permission on mediaItem
+                            $query = $this->doctrine->createQuery('SELECT p FROM Wixet\WixetBundle\Entity\ProfilePermission p '
+                                    .' JOIN p.objectType t '
+                                    .'WHERE p.realItemId = ?1 AND t.name = ?2');
+                            
+                            $query->setParameter(1,$object.getId());
+                            $query->setParameter(2,$objectClass);
+                            
+                            try{
+                            $permission = $query->getSingleResult();
+                                }catch(\Exception $e){
+                                    //Item does not have permissions
+                                    $permission = new ProfilePermission();
+                                    $permission->setProfile($identity);
+                                    $initPermission = true;
+                            }
+
                     }else throw new \Exception("Identity must be an instace of ".$this->groupClass." or ".$this->profileClass);
                 
                     $permission->setReadGranted($readGranted);
@@ -73,54 +104,79 @@ class PermissionManager
                     $permission->setWriteGranted($writeGranted);
                     $permission->setWriteDenied($writeDenied);
 
-                    if($album == null)
-                        $permission->setAlbum($object->getProfile()->getMainAlbum());
-                    else
-                        $permission->setAlbum($album);
+                    if($initPermission){
+                        $permission->setAlbum($object->getAlbum());
+                        
+                        $permission->setRealItemId($object->getId());
 
-                    //if($this->useCache != null){
-                            //De momento no se cachea por la complejidad
-                            //Remove all cache permissions of this object
-                            //$this->removeObjectPermissionCache($object);
-                    //}
+                        $objectType = $this->doctrine->getRepository('Wixet\WixetBundle\Entity\ObjectType')->findBy(array('name' => get_class($object)));
+                        if($objectType == null){
+                                $objectType = new ObjectType();
+                                $objectType->setName(get_class($object));
+                                $this->doctrine->persist($objectType);
+                        }else $objectType = $objectType[0];
+
+                        $permission->setObjectType($objectType);
+
+                        $permission->setObjectCreationTime($object->getCreated());
 
 
-                    $permission->setRealItemId($object->getId());
-
-                    $objectType = $this->doctrine->getRepository('Wixet\WixetBundle\Entity\ObjectType')->findBy(array('name' => get_class($object)));
-                    if($objectType == null){
-                            $objectType = new ObjectType();
-                            $objectType->setName(get_class($object));
-                            $this->doctrine->persist($objectType);
-                    }else $objectType = $objectType[0];
-
-                    $permission->setObjectType($objectType);
+                        $this->doctrine->persist($permission);
+                    }
                     
-                    $permission->setObjectCreationTime($object->getCreated());
-
-
-                    $this->doctrine->persist($permission);
                     $this->doctrine->flush();
                     
-                    //Ahora los final permission
-                    //$rsm = new \Doctrine\ORM\Query\ResultSetMapping;
-                    //$rsm->addEntityResult('Wixet\WixetBundle\Entity\FinalPermission', 'u');//Utilizo esta por usar una cualquiera ya que es necesario especificar uno
-                    //$rsm->addFieldResult('u', 'item_id', 'itemId');
-        
-                    if($this->albumClass == $albumClass){
-                        //Album object
-                        
+                    //Now the final permissions
+                    if($this->albumClass == $objectClass){
+                        //Add a permission to every item in the Album
+                        if($this->profileClass == $identityClass){
+                            $album = $object;
+                            //Remove old final permission
+                            $sql = "delete from final_permission where profile_id = ".$identity->getId()." and album_id = ".$album->getId()." and group_id is null";
+                            $this->dbal->query($sql);
+                            //Only to one Profile
+                            
+                            $sql="insert into final_permission (profile_id, album_id, real_item_id, object_type_id, read_granted, read_denied, write_granted, write_denied, object_creation_time)
+                                       select profile_id, ".$album->getId().", real_item_id, object_type_id, ".($permission->getReadGranted()?1:0).",".($permission->getReadDenied()?1:0).",".($permission->getWriteGranted()?1:0).",".($permission->getWriteDenied()?1:0).", object_creation_time
+                                       from user_permission gp
+                                       where profile_id = ".$identity->getId()." and album = ".$album->getId();
+                            $this->dbal->query($sql);
+                                        
+                        }else{
+                            
+                          $album = $object;
+                          //Remove old final permission
+                            $sql = "delete from final_permission where group_id = ".$identity->getId()." and album_id = ".$album->getId();
+                            $this->dbal->query($sql);
+                            
+                          //To every profile in the group
+                          $sql="insert into final_permission (profile_id, group_id, album_id, real_item_id, object_type_id, read_granted, read_denied, write_granted, write_denied, object_creation_time)
+                                       select p.id, group_id, ".$album->getId().", real_item_id, object_type_id, ".($permission->getReadGranted()?1:0).",".($permission->getReadDenied()?1:0).",".($permission->getWriteGranted()?1:0).",".($permission->getWriteDenied()?1:0).", object_creation_time
+                                       from group_permission gp
+                                       join profilegroup_userprofile r on (gp.group_id = r.profilegroup_id)
+                                       join user_profile p on (r.userprofile_id = p.id)  
+                                       where group_id = ".$identity->getId()." and album = ".$album->getId();
+                          $this->dbal->query($sql);
+                        }
 
                     }else{
                         //Normal object
                         if($this->profileClass == $identityClass){
+                            //Remove old final permission
+                            $sql = "delete from final_permission where profile_id = ".$identity->getId()." and real_item_id = ".$object->getId()." and object_type_id = ".$object->getObjectType()->getId()." and group_id is null and album is null";
+                            $this->dbal->query($sql);
+                            
+                            
                             //Add permission to one profile over an item
                             $sql = "insert into final_permission (profile_id, real_item_id, object_type_id, album_id, read_granted, read_denied, write_granted, write_denied, object_creation_time) ".
                                    "values ".
                                    "(".$identity->getId().",".$object->getId().",".$objectType->getId().",".$album->getId().",".($permission->getReadGranted()?1:0).",".($permission->getReadDenied()?1:0).",".($permission->getWriteGranted()?1:0).",".($permission->getWriteDenied()?1:0).",STR_TO_DATE('".$object->getCreated()->format("Y-m-d")."','%Y-%m-%d'))";
                             $this->dbal->query($sql);
                         }else{
-                            //Add permission a group over an item (if no profile, then profile. Checked before)
+                            //Remove old final permission
+                            $sql = "delete from final_permission where group_id = ".$identity->getId()." and real_item_id = ".$object->getId()." and object_type_id = ".$object->getObjectType()->getId()." and album is null";
+                            $this->dbal->query($sql);
+                            //Add permission a group over an item
                             	$sql="insert into final_permission (profile_id,  group_id, album_id, real_item_id, object_type_id, read_granted, read_denied, write_granted, write_denied, object_creation_time)
                                                             select p.id, group_id, album_id, real_item_id, object_type_id, read_granted, read_denied, write_granted, write_denied, object_creation_time
                                                             from group_permission gp
@@ -130,11 +186,21 @@ class PermissionManager
                             $this->dbal->query($sql);
                         }
                     }
-                    
-                //}
-                
-                //return $permission;
 	}
+        
+        
+        public function removePermission($permission){
+            
+        }
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         public function isWritable($object,$user){
 		//The owner always have permission
@@ -147,7 +213,6 @@ class PermissionManager
 		return $perm['readGranted'] > 0 && $perm['readDenied'] == 0;
 	}
         
-	public function removePermission($permission){}
 	public function getPermissions($object,$user){
             //TODO cachear los permisos
 		$finalPermission = array();
