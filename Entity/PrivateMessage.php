@@ -32,7 +32,7 @@ class PrivateMessage implements Timestampable
      private $author;
     
     /**
-     * @ORM\Column(columnDefinition="TEXT NOT NULL")
+     * @ORM\Column(type="string", length=1000)
      */
      protected $body; 
      
@@ -41,13 +41,16 @@ class PrivateMessage implements Timestampable
      * @ORM\Column(type="string")
      */
      protected $subject; 
-     
+
+     /**
+     * @ORM\Column(type="boolean")
+     */
+     protected $isRoot; 
      
     /**
      * @ORM\Column(type="integer")
      */
      protected $conversation_id; 
-     
      
      /**
      * @ORM\ManyToOne(targetEntity="Wixet\WixetBundle\Entity\PrivateMessageCollection", inversedBy="messages")
@@ -71,5 +74,145 @@ class PrivateMessage implements Timestampable
      * @Gedmo\Timestampable(on="update")
      */
     private $updated;
+	/**
+	 * @return the $id
+	 */
+	public function getId() {
+		return $this->id;
+	}
+
+	/**
+	 * @return the $profile
+	 */
+	public function getProfile() {
+		return $this->profile;
+	}
+
+	/**
+	 * @return the $author
+	 */
+	public function getAuthor() {
+		return $this->author;
+	}
+
+	/**
+	 * @return the $body
+	 */
+	public function getBody() {
+		return $this->body;
+	}
+
+	/**
+	 * @return the $subject
+	 */
+	public function getSubject() {
+		return $this->subject;
+	}
+
+	/**
+	 * @return the $isRoot
+	 */
+	public function getIsRoot() {
+		return $this->isRoot;
+	}
+
+	/**
+	 * @return the $conversation_id
+	 */
+	public function getConversationId() {
+		return $this->conversation_id;
+	}
+
+	/**
+	 * @return the $private_message_collection
+	 */
+	public function getPrivateMessageCollection() {
+		return $this->private_message_collection;
+	}
+
+	/**
+	 * @return the $created
+	 */
+	public function getCreated() {
+		return $this->created;
+	}
+
+	/**
+	 * @return the $updated
+	 */
+	public function getUpdated() {
+		return $this->updated;
+	}
+
+	/**
+	 * @param field_type $id
+	 */
+	public function setId($id) {
+		$this->id = $id;
+	}
+
+	/**
+	 * @param field_type $profile
+	 */
+	public function setProfile($profile) {
+		$this->profile = $profile;
+	}
+
+	/**
+	 * @param field_type $author
+	 */
+	public function setAuthor($author) {
+		$this->author = $author;
+	}
+
+	/**
+	 * @param field_type $body
+	 */
+	public function setBody($body) {
+		$this->body = $body;
+	}
+
+	/**
+	 * @param field_type $subject
+	 */
+	public function setSubject($subject) {
+		$this->subject = $subject;
+	}
+
+	/**
+	 * @param field_type $isRoot
+	 */
+	public function setIsRoot($isRoot) {
+		$this->isRoot = $isRoot;
+	}
+
+	/**
+	 * @param field_type $conversation_id
+	 */
+	public function setConversationId($conversation_id) {
+		$this->conversation_id = $conversation_id;
+	}
+
+	/**
+	 * @param field_type $private_message_collection
+	 */
+	public function setPrivateMessageCollection($private_message_collection) {
+		$this->private_message_collection = $private_message_collection;
+	}
+
+	/**
+	 * @param datetime $created
+	 */
+	public function setCreated($created) {
+		$this->created = $created;
+	}
+
+	/**
+	 * @param datetime $updated
+	 */
+	public function setUpdated($updated) {
+		$this->updated = $updated;
+	}
+
     
 }

@@ -29,7 +29,7 @@ class UserProfile implements Timestampable
      protected $id;
      
     /**
-     * @ORM\ManyToOne(targetEntity="Wixet\WixetBundle\Entity\User", inversedBy="profiles")
+     * @ORM\OneToOne(targetEntity="Wixet\WixetBundle\Entity\User", inversedBy="profile")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      */
      protected $user;
@@ -152,13 +152,10 @@ class UserProfile implements Timestampable
         $this->updates = $updates;
     }
 
-    public function getPrivate_messages_collections() {
+    public function getPrivateMessagesCollections() {
         return $this->private_messages_collections;
     }
 
-    public function setPrivate_messages_collections($private_messages_collections) {
-        $this->private_messages_collections = $private_messages_collections;
-    }
 
     public function getFavourites() {
         return $this->favourites;

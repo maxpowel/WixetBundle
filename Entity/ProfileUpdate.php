@@ -20,7 +20,7 @@ class ProfileUpdate implements Timestampable
      protected $id;
      
     /**
-     * @ORM\ManyToOne(targetEntity="Wixet\WixetBundle\Entity\UserProfile", inversedBy="updates")
+     * @ORM\ManyToOne(targetEntity="Wixet\WixetBundle\Entity\UserProfile", inversedBy="newness")
      * @ORM\JoinColumn(name="profile_id", referencedColumnName="id", nullable=false)
      */
      protected $profile;
@@ -51,5 +51,6 @@ class ProfileUpdate implements Timestampable
      * @Gedmo\Timestampable(on="update")
      */
     private $updated;
+    
     
 }

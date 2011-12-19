@@ -12,6 +12,9 @@ use Gedmo\Mapping\Annotation as Gedmo;
  */
 class MediaItem implements Timestampable
 {
+	public function getAlbum(){
+		return $this->album;
+	}
     public function getCreated() {
         return $this->created;
     }
@@ -116,6 +119,12 @@ class MediaItem implements Timestampable
      * @ORM\generatedValue(strategy="AUTO")
      */
      protected $id;
+
+     
+     /**
+     * @ORM\ManyToOne(targetEntity="Wixet\WixetBundle\Entity\Album", inversedBy="photos")
+     */
+     protected $album;
      
     /**
      * @ORM\ManyToOne(targetEntity="Wixet\WixetBundle\Entity\UserProfile", inversedBy="updates")

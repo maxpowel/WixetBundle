@@ -19,8 +19,9 @@
         </service>
         
         <service id="wixet.fetcher" class="%wixet.fetcher.class%">
+            <argument type="service" id="doctrine.orm.default_entity_manager" />
           <argument>%wixet.config%</argument>
-          <argument type="service" id="doctrine.orm.default_entity_manager" />
+          <argument type="service" id="database_connection" />
         </service>
 
         <service id="wixet.media_item_manager" class="%wixet.media_item_manager.class%">

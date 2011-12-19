@@ -31,9 +31,9 @@ class User extends BaseUser implements Timestampable
     protected $id;
 
     /**
-     * @ORM\OneToMany(targetEntity="Wixet\WixetBundle\Entity\UserProfile", mappedBy="user")
+     * @ORM\OneToOne(targetEntity="Wixet\WixetBundle\Entity\UserProfile", mappedBy="user")
      */
-    protected $profiles;
+    protected $profile;
 	
 
     /**
@@ -61,4 +61,74 @@ class User extends BaseUser implements Timestampable
      * @Gedmo\Timestampable(on="update")
      */
     private $updated;
+	/**
+	 * @return the $id
+	 */
+	public function getId() {
+		return $this->id;
+	}
+
+	/**
+	 * @return the $profile
+	 */
+	public function getProfile() {
+		return $this->profile;
+	}
+
+	/**
+	 * @return the $groups
+	 */
+	public function getGroups() {
+		return $this->groups;
+	}
+
+	/**
+	 * @return the $created
+	 */
+	public function getCreated() {
+		return $this->created;
+	}
+
+	/**
+	 * @return the $updated
+	 */
+	public function getUpdated() {
+		return $this->updated;
+	}
+
+	/**
+	 * @param field_type $id
+	 */
+	public function setId($id) {
+		$this->id = $id;
+	}
+
+	/**
+	 * @param field_type $profile
+	 */
+	public function setProfile($profile) {
+		$this->profile = $profile;
+	}
+
+	/**
+	 * @param field_type $groups
+	 */
+	public function setGroups($groups) {
+		$this->groups = $groups;
+	}
+
+	/**
+	 * @param datetime $created
+	 */
+	public function setCreated($created) {
+		$this->created = $created;
+	}
+
+	/**
+	 * @param datetime $updated
+	 */
+	public function setUpdated($updated) {
+		$this->updated = $updated;
+	}
+
 }

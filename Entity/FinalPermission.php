@@ -52,7 +52,7 @@ class FinalPermission
      
      /**
      * @ORM\ManyToOne(targetEntity="Wixet\WixetBundle\Entity\Album")
-     * @ORM\JoinColumn(name="album_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="album_id", referencedColumnName="id", nullable=true)
      */
      protected $album;
      
