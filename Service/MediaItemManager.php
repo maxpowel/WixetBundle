@@ -34,7 +34,13 @@ class MediaItemManager
         }
         
         public function printProfileThumbnail($mediaItem){
-            readfile($this->fileDir."/".$mediaItem->getUser()->getId()."/profile/".$mediaItem->getId());
+        	$filename = $this->fileDir."/".$mediaItem->getProfile()->getId()."/profile/".$mediaItem->getId();
+        	if(file_exists($filename)) {
+        		header('Content-Type: '.$mediaItem->getMimeType()->getName());
+        		ob_clean();
+        		flush();
+        		readfile($filename);
+        	}
 
         }
         
@@ -111,7 +117,7 @@ class MediaItemManager
 	    public function saveFile($filePath, \Wixet\WixetBundle\Entity\MediaItem $mediaItem){
             //TODO: hacerlo para videos e imagenes
             $fileType = $mediaItem->getMimeType()->getName();
-            $ownerId = $mediaItem->getUser()->getId();
+            $ownerId = $mediaItem->getProfile()->getId();
             if($mediaItem->getMimeType()->getName() == "image/png")
                 $origen = imagecreatefrompng($filePath);
             elseif($mediaItem->getMimeType()->getName() == "image/jpeg")

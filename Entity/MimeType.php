@@ -21,7 +21,14 @@ class MimeType
     /**
      * @ORM\Column(type="string")
      */
-     protected $body; 
+     protected $name; 
      
+     public function getName(){
+     	return $this->name;
+     }
+     
+     public function getId(){
+     	return $this->id;
+     }
     
 }

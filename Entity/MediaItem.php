@@ -15,6 +15,11 @@ class MediaItem implements Timestampable
 	public function getAlbum(){
 		return $this->album;
 	}
+	
+	public function setAlbum($album){
+		$this->album = $album;
+	}
+	
     public function getCreated() {
         return $this->created;
     }
@@ -133,12 +138,12 @@ class MediaItem implements Timestampable
      protected $profile;
     
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      */
      protected $description; 
      
      /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=true)
      */
      protected $duration; 
      
@@ -148,7 +153,7 @@ class MediaItem implements Timestampable
      protected $file_size; 
      
      /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      */
      protected $title; 
      
