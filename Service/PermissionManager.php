@@ -107,7 +107,7 @@ class PermissionManager
                     $permission->setWriteDenied($writeDenied);
 
                     if($initPermission){
-                    	if($this->albumClass != $objectClass)
+                    	if($this->albumClass != $objectClass && $this->profileClass != $objectClass)
                         	$permission->setAlbum($object->getAlbum());
                         
                         $permission->setRealItemId($object->getId());
@@ -193,7 +193,7 @@ class PermissionManager
                             $this->dbal->query($sql);
                             
                         	    
-                            if($this->albumClass == $objectClass)
+                            if($this->albumClass == $objectClass || $this->profileClass == $objectClass)
                             	$albumId = "null";                            	
                             else 
                             	$albumId = $object->getAlbum()->getId();

@@ -25,12 +25,35 @@ class MediaItemManager
 	}
 	
         
+	
+		public function printMediaItemOriginal($mediaItem){
+			$filename = $this->fileDir."/".$mediaItem->getProfile()->getId()."/".$mediaItem->getId();
+			if(file_exists($filename)) {
+				header('Content-Type: application/octet-stream');
+				ob_clean();
+				flush();
+				readfile($filename);
+			}
+		}
+	
         public function printMediaItem($mediaItem){
-            readfile($this->fileDir."/".$mediaItem->getUser()->getId()."/".$mediaItem->getId());
+        	$filename = $this->fileDir."/".$mediaItem->getProfile()->getId()."/".$mediaItem->getId();
+        	if(file_exists($filename)) {
+        		header('Content-Type: '.$mediaItem->getMimeType()->getName());
+        		ob_clean();
+        		flush();
+        		readfile($filename);
+        	}
         }
         
         public function printMediaItemThumbnail($mediaItem){
-            readfile($this->fileDir."/".$mediaItem->getUser()->getId()."/thumbnail/".$mediaItem->getId());
+        	$filename = $this->fileDir."/".$mediaItem->getProfile()->getId()."/thumbnail/".$mediaItem->getId();
+        	if(file_exists($filename)) {
+        		header('Content-Type: '.$mediaItem->getMimeType()->getName());
+        		ob_clean();
+        		flush();
+        		readfile($filename);
+        	}
         }
         
         public function printProfileThumbnail($mediaItem){

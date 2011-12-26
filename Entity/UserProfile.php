@@ -56,7 +56,7 @@ class UserProfile implements Timestampable
      private $city;
      
     /**
-     * @ORM\OneToMany(targetEntity="Wixet\WixetBundle\Entity\ProfileUpdate", mappedBy="profile")
+     * @ORM\OneToMany(targetEntity="Wixet\WixetBundle\Entity\ProfileUpdate", mappedBy="profile", fetch="EXTRA_LAZY")
      */
 	protected $updates;
 	
@@ -112,19 +112,19 @@ class UserProfile implements Timestampable
         $this->user = $user;
     }
 
-    public function getFirst_name() {
+    public function getFirstName() {
         return $this->first_name;
     }
 
-    public function setFirst_name($first_name) {
+    public function setFirstName($first_name) {
         $this->first_name = $first_name;
     }
 
-    public function getLast_name() {
+    public function getLastName() {
         return $this->last_name;
     }
 
-    public function setLast_name($last_name) {
+    public function setLastName($last_name) {
         $this->last_name = $last_name;
     }
 

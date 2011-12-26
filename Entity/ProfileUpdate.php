@@ -52,5 +52,45 @@ class ProfileUpdate implements Timestampable
      */
     private $updated;
     
+    public function getId(){
+    	return $this->id;
+    }
+    
+    public function getProfile(){
+    	return $this->profile;
+    }
+    
+    public function setProfile($profile){
+    	$this->profile = $profile;
+    }
+    
+    public function getAuthor(){
+    	return $this->author;
+    }
+    
+    public function setAuthor($author){
+    	$this->author = $author;
+    }
+    
+    public function getBody(){
+    	return $this->body;
+    }
+    
+    public function setBody($body){
+    	$this->body = $body;
+    }
+    
+    public function getCreated(){
+    	return $this->created;
+    }
+    
+    public function getUpdated(){
+    	return $this->updated;
+    }
+    
+    
+    
+    
+    
     
 }
