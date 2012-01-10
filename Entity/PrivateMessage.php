@@ -48,8 +48,8 @@ class PrivateMessage implements Timestampable
      protected $isRoot; 
      
     /**
-     * @ORM\Column(type="integer")
-     */
+ 	* @ORM\Column(type="string", columnDefinition="CHAR(13) NOT NULL")
+ 	*/
      protected $conversation_id; 
      
      /**

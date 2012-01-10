@@ -77,6 +77,16 @@ class UserProfile implements Timestampable
 	protected $albums;
 	
         
+	/**
+	* @ORM\OneToOne(targetEntity="Wixet\WixetBundle\Entity\PrivateMessageCollection")
+	*/
+	protected $main_private_message_collection;
+	
+	/**
+	* @ORM\OneToOne(targetEntity="Wixet\WixetBundle\Entity\Album")
+	*/
+	protected $main_album;
+	
         
     /**
      * @ORM\ManyToMany(targetEntity="Wixet\WixetBundle\Entity\ProfileGroup", mappedBy="profiles")
@@ -155,6 +165,14 @@ class UserProfile implements Timestampable
     public function getPrivateMessagesCollections() {
         return $this->private_messages_collections;
     }
+    
+    public function getMainPrivateMessageCollection() {
+    	return $this->main_private_message_collection;
+    }
+    
+    public function getMainAlbum() {
+    	return $this->main_album;
+    }
 
 
     public function getFavourites() {
@@ -169,6 +187,14 @@ class UserProfile implements Timestampable
         return $this->albums;
     }
 
+    public function setMainAlbum($album) {
+    	$this->main_album = $album;
+    }
+    
+    public function setMainPrivateMessageCollection($coll) {
+    	$this->main_private_message_collection = $coll;
+    }
+    
     public function setAlbums($albums) {
         $this->albums = $albums;
     }
