@@ -8,9 +8,9 @@ use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="profile_update")
+ * @ORM\Table(name="profile_update_comment")
  */
-class ProfileUpdate implements Timestampable
+class ProfileUpdateComment implements Timestampable
 {
     /**
      * @ORM\Id
@@ -20,15 +20,10 @@ class ProfileUpdate implements Timestampable
      protected $id;
      
      /**
-     * @ORM\OneToMany(targetEntity="Wixet\WixetBundle\Entity\ProfileUpdateComment", mappedBy="profile_update", fetch="EXTRA_LAZY")
+     * @ORM\ManyToOne(targetEntity="Wixet\WixetBundle\Entity\ProfileUpdate", inversedBy="profile_update")
+     * @ORM\JoinColumn(name="profile_update_id", referencedColumnName="id", nullable=false)
      */
-     protected $comments;
-     
-    /**
-     * @ORM\ManyToOne(targetEntity="Wixet\WixetBundle\Entity\UserProfile", inversedBy="newness")
-     * @ORM\JoinColumn(name="profile_id", referencedColumnName="id", nullable=false)
-     */
-     protected $profile;
+     protected $profile_update;
      
     /**
      * @ORM\ManyToOne(targetEntity="Wixet\WixetBundle\Entity\UserProfile")
@@ -77,12 +72,16 @@ class ProfileUpdate implements Timestampable
     	$this->author = $author;
     }
     
-    public function getBody(){
-    	return $this->body;
+    public function setProfileUpdate($update){
+    	$this->profile_update = $update;
     }
     
-    public function getComments(){
-    	return $this->comments;
+    public function getProfileUpdate(){
+    	return $this->profile_update;
+    }
+    
+    public function getBody(){
+    	return $this->body;
     }
     
     public function setBody($body){
