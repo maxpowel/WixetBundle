@@ -52,4 +52,50 @@ class Favourite implements Timestampable
      */
     private $updated;
     
+    
+    public function getId(){
+    	return $this->id;
+    }
+    
+    public function getProfile(){
+    	return $this->profile;
+    }
+    
+    public function getTitle(){
+    	return $this->title;
+    }
+    
+    public function getBody(){
+    	return $this->body;
+    }
+    
+    public function getCreated(){
+    	return $this->created;
+    }
+    
+    public function getUpdated(){
+    	return $this->updated;
+    }
+    
+    
+    public function setProfile($var){
+    	$this->profile = $var;
+    }
+    
+    public function setTitle($var){
+    	$this->title = $var;
+    }
+    
+    public function setBody($var){
+    	$this->body = $var;
+    }
+    
+    public function setCreated($var){
+    	$this->created = $var;
+    }
+    
+    public function setUpdated($var){
+    	$this->updated = $var;
+    }
+    
 }

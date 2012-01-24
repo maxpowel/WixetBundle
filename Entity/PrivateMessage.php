@@ -5,10 +5,11 @@ namespace Wixet\WixetBundle\Entity;
 use Gedmo\Timestampable\Timestampable;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+/* Index for "created" because this column is used for join when a message list is request. See getMessage in privateMessageController */
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="private_message",indexes={@ORM\index(name="conversation", columns={"conversation_id"})})
+ * @ORM\Table(name="private_message",indexes={@ORM\index(name="conversation", columns={"conversation_id"}), @ORM\index(name="created", columns={"created"})})
  */
 class PrivateMessage implements Timestampable
 {
@@ -45,7 +46,7 @@ class PrivateMessage implements Timestampable
      /**
      * @ORM\Column(type="boolean")
      */
-     protected $isRoot; 
+     protected $is_read;
      
     /**
  	* @ORM\Column(type="string", columnDefinition="CHAR(13) NOT NULL")
@@ -110,10 +111,10 @@ class PrivateMessage implements Timestampable
 	}
 
 	/**
-	 * @return the $isRoot
+	 * @return the $isRead
 	 */
-	public function getIsRoot() {
-		return $this->isRoot;
+	public function getIsRead() {
+		return $this->is_read;
 	}
 
 	/**
@@ -180,10 +181,10 @@ class PrivateMessage implements Timestampable
 	}
 
 	/**
-	 * @param field_type $isRoot
+	 * @param field_type $isRead
 	 */
-	public function setIsRoot($isRoot) {
-		$this->isRoot = $isRoot;
+	public function setIsRead($isRead) {
+		$this->is_read = $isRead;
 	}
 
 	/**
