@@ -18,6 +18,7 @@ class UserProfile implements Timestampable
         $this->updates = new \Doctrine\Common\Collections\ArrayCollection();
         $this->private_messages_collections = new \Doctrine\Common\Collections\ArrayCollection();
         $this->favourites = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->extensions = new \Doctrine\Common\Collections\ArrayCollection();
         $this->albums = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
@@ -67,7 +68,7 @@ class UserProfile implements Timestampable
 	protected $private_messages_collections;
 	
 	/**
-     * @ORM\OneToMany(targetEntity="Wixet\WixetBundle\Entity\Favourite", mappedBy="profile")
+     * @ORM\ManyToMany(targetEntity="Wixet\WixetBundle\Entity\Favourite", mappedBy="profiles")
      */
 	protected $favourites;
 	
@@ -93,6 +94,10 @@ class UserProfile implements Timestampable
      */
     protected $profile_groups;
     
+    /**
+    * @ORM\OneToMany(targetEntity="Wixet\WixetBundle\Entity\UserProfileExtension", mappedBy="profile")
+    */
+    protected $extensions;
     
 	/**
      * @var datetime $created
@@ -109,6 +114,7 @@ class UserProfile implements Timestampable
      * @Gedmo\Timestampable(on="update")
      */
     private $updated;
+    
     
     public function getId() {
         return $this->id;
@@ -157,9 +163,17 @@ class UserProfile implements Timestampable
     public function getUpdates() {
         return $this->updates;
     }
+    
+    public function getExtensions() {
+    	return $this->extensions;
+    }
 
     public function setUpdates($updates) {
         $this->updates = $updates;
+    }
+    
+    public function setExtensions($ex) {
+    	$this->extensions = $ex;
     }
 
     public function getPrivateMessagesCollections() {

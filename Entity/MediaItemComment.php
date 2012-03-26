@@ -55,4 +55,44 @@ class MediaItemComment implements Timestampable
      */
     private $updated;
     
+    
+    
+    public function getId(){
+    	return $this->id;
+    }
+    
+    public function getMediaItem(){
+    	return $this->media_item;	
+    }
+    
+    public function getProfile(){
+    	return $this->profile;
+    }
+    
+    public function getBody(){
+    	return $this->body;
+    }
+    
+    public function getCreated(){
+    	return $this->created;
+    }
+    
+    public function getUpdated(){
+    	return $this->updated;
+    }
+    
+
+    public function setMediaItem($item){
+    	$this->media_item = $item;
+    }
+    
+    public function setProfile($item){
+    	$this->profile = $item;
+    }
+    
+    public function setBody($item){
+    	$this->body = $item;
+    }
+    
+    
 }

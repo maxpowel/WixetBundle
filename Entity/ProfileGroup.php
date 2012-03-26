@@ -12,7 +12,14 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\Table(name="profile_group")
  */
 class ProfileGroup implements Timestampable
-{    public function getProfile() {
+{    
+
+	public function __construct()
+    {
+        $this->profiles = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    public function getProfile() {
         return $this->profile;
     }
 
@@ -44,6 +51,10 @@ class ProfileGroup implements Timestampable
         return $this->updated;
     }
 
+    public function addProfile($profile){
+    	$this->profiles->add($profile);
+    }
+    
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")

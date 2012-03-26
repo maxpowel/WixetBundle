@@ -17,7 +17,7 @@ class PermissionManager
     private $doctrineCache;
     private $dbal;
     
-        public function __construct($em,$config,$dbal)
+    public function __construct($em,$config,$dbal)
 	{
                 $this->dbal = $dbal;
 		$this->doctrine = $em;
@@ -63,8 +63,8 @@ class PermissionManager
                         //Check if permission already exists
                         //Group permission on mediaItem
 						$query = $this->doctrine->createQuery('SELECT p FROM Wixet\WixetBundle\Entity\GroupPermission p '
-                                .' JOIN p.objectType t '
-                                .'WHERE p.realItemId = ?1 AND t.name = ?2');
+                                .' JOIN p.object_type t '
+                                .'WHERE p.real_item_id = ?1 AND t.name = ?2');
 									  
 
 									  
@@ -189,23 +189,30 @@ class PermissionManager
                         //Normal object (also is added the permission for an album as normal object)
                         if($this->profileClass == $identityClass){
                             //Remove old final permission
-                            $sql = "delete from final_permission where profile_id = ".$identity->getId()." and real_item_id = ".$object->getId()." and object_type_id = ".$objectType->getId()." and group_id is null and album_id is null";
+                            $sql = "delete from final_permission where profile_id = ".$identity->getId()." and real_item_id = ".$object->getId()." and object_type_id = ".$objectType->getId()." and group_id is null and album_id =".$object->getAlbum()->getId();
                             $this->dbal->query($sql);
                             
                         	    
-                            if($this->albumClass == $objectClass || $this->profileClass == $objectClass)
+                           /* if($this->albumClass == $objectClass || $this->profileClass == $objectClass)
                             	$albumId = "null";                            	
                             else 
-                            	$albumId = $object->getAlbum()->getId();
+                            	$albumId = $object->getAlbum()->getId();*/
                             //Add permission to one profile over an item
                             $sql = "insert into final_permission (profile_id, real_item_id, object_type_id, album_id, read_granted, read_denied, write_granted, write_denied, object_creation_time) ".
                                    "values ".
                                    "(".$identity->getId().",".$object->getId().",".$objectType->getId().",".$albumId.",".($permission->getReadGranted()?1:0).",".($permission->getReadDenied()?1:0).",".($permission->getWriteGranted()?1:0).",".($permission->getWriteDenied()?1:0).",STR_TO_DATE('".$object->getCreated()->format("Y-m-d")."','%Y-%m-%d'))";
                             $this->dbal->query($sql);
                         }else{
+                        	//Is group
                             //Remove old final permission
-                            $sql = "delete from final_permission where group_id = ".$identity->getId()." and real_item_id = ".$object->getId()." and object_type_id = ".$object->getObjectType()->getId()." and album is null";
+                            //$sql = "delete from final_permission where group_id = ".$identity->getId()." and real_item_id = ".$object->getId()." and object_type_id = ".$objectType->getId()." and album_id is null";
+                        	$sql = "delete from final_permission where group_id = ".$identity->getId()." and real_item_id = ".$object->getId()." and object_type_id = ".$objectType->getId()." and album_id =".$object->getAlbum()->getId();;
                             $this->dbal->query($sql);
+                            
+                            /*if($this->albumClass == $objectClass || $this->profileClass == $objectClass)
+                            	$albumId = "null";
+                            else
+                            	$albumId = $object->getAlbum()->getId();*/
                             //Add permission a group over an item
                             	$sql="insert into final_permission (profile_id,  group_id, album_id, real_item_id, object_type_id, read_granted, read_denied, write_granted, write_denied, object_creation_time)
                                                             select p.id, group_id, album_id, real_item_id, object_type_id, read_granted, read_denied, write_granted, write_denied, object_creation_time

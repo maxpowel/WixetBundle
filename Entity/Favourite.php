@@ -12,7 +12,13 @@ use Gedmo\Mapping\Annotation as Gedmo;
  */
 class Favourite implements Timestampable
 {
-    
+	
+	public function __construct()
+	{
+		$this->profiles = new \Doctrine\Common\Collections\ArrayCollection();
+	}
+	
+	
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
@@ -21,20 +27,15 @@ class Favourite implements Timestampable
      protected $id;
      
     /**
-     * @ORM\ManyToOne(targetEntity="Wixet\WixetBundle\Entity\UserProfile", inversedBy="favourites")
-     * @ORM\JoinColumn(name="profile_id", referencedColumnName="id", nullable=false)
+     * @ORM\ManyToMany(targetEntity="Wixet\WixetBundle\Entity\UserProfile", inversedBy="favourites")
      */
-     protected $profile;
+     protected $profiles;
     
     /**
      * @ORM\Column(type="string")
      */
-     protected $title; 
-     
-    /**
-     * @ORM\Column(columnDefinition="TEXT NOT NULL")
-     */
-     protected $body; 
+     protected $name; 
+      
 	
     /**
      * @var datetime $created
@@ -51,22 +52,18 @@ class Favourite implements Timestampable
      * @Gedmo\Timestampable(on="update")
      */
     private $updated;
-    
+
     
     public function getId(){
     	return $this->id;
     }
     
-    public function getProfile(){
-    	return $this->profile;
+    public function getProfiles(){
+    	return $this->profiles;
     }
     
-    public function getTitle(){
-    	return $this->title;
-    }
-    
-    public function getBody(){
-    	return $this->body;
+    public function getName(){
+    	return $this->name;
     }
     
     public function getCreated(){
@@ -78,17 +75,10 @@ class Favourite implements Timestampable
     }
     
     
-    public function setProfile($var){
-    	$this->profile = $var;
+    public function setName($var){
+    	$this->name = $var;
     }
-    
-    public function setTitle($var){
-    	$this->title = $var;
-    }
-    
-    public function setBody($var){
-    	$this->body = $var;
-    }
+
     
     public function setCreated($var){
     	$this->created = $var;

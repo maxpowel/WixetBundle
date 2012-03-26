@@ -8,7 +8,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="media_item")
+ * @ORM\Table(name="media_item", indexes={@ORM\index(name="mi_created", columns={"created"})})
  */
 class MediaItem implements Timestampable
 {
@@ -174,7 +174,8 @@ class MediaItem implements Timestampable
      
      
      /**
-     * @ORM\OneToMany(targetEntity="Wixet\WixetBundle\Entity\MediaItemComment", mappedBy="blog")
+     * @ORM\OneToMany(targetEntity="Wixet\WixetBundle\Entity\MediaItemComment", fetch="EXTRA_LAZY", mappedBy="media_item")
+     * @ORM\OrderBy({"created" = "DESC"})
      */
 	 protected $comments;
 	 

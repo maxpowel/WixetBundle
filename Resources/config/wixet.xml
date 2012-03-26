@@ -8,6 +8,7 @@
         <parameter key="wixet.permission_manager.class">Wixet\WixetBundle\Service\PermissionManager</parameter>
         <parameter key="wixet.media_item_manager.class">Wixet\WixetBundle\Service\MediaItemManager</parameter>
         <parameter key="wixet.fetcher.class">Wixet\WixetBundle\Service\Fetcher</parameter>
+        <parameter key="wixet.query_manager.class">Wixet\WixetBundle\Service\QueryManager</parameter>
     </parameters>
 
     <services>
@@ -22,6 +23,10 @@
             <argument type="service" id="doctrine.orm.default_entity_manager" />
           <argument>%wixet.config%</argument>
           <argument type="service" id="database_connection" />
+        </service>
+        
+        <service id="wixet.query_manager" class="%wixet.query_manager.class%">
+            <argument type="service" id="doctrine.orm.default_entity_manager" />
         </service>
 
         <service id="wixet.media_item_manager" class="%wixet.media_item_manager.class%">
