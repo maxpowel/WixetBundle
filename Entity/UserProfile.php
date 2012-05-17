@@ -9,7 +9,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 /**
  * @ORM\Entity
  * @ORM\Table(name="user_profile")
- * @Gedmo\Loggable
  */
 class UserProfile implements Timestampable
 {
@@ -19,7 +18,9 @@ class UserProfile implements Timestampable
         $this->private_messages_collections = new \Doctrine\Common\Collections\ArrayCollection();
         $this->favourites = new \Doctrine\Common\Collections\ArrayCollection();
         $this->extensions = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->albums = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->itemContainers = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->profile_groups = new \Doctrine\Common\Collections\ArrayCollection();
+        
     }
     
     /**
@@ -73,9 +74,9 @@ class UserProfile implements Timestampable
 	protected $favourites;
 	
 	/**
-     * @ORM\OneToMany(targetEntity="Wixet\WixetBundle\Entity\Album", mappedBy="profile")
+     * @ORM\OneToMany(targetEntity="Wixet\WixetBundle\Entity\ItemContainer", mappedBy="profile")
      */
-	protected $albums;
+	protected $item_containers;
 	
         
 	/**
@@ -84,9 +85,14 @@ class UserProfile implements Timestampable
 	protected $main_private_message_collection;
 	
 	/**
-	* @ORM\OneToOne(targetEntity="Wixet\WixetBundle\Entity\Album")
+	* @ORM\OneToOne(targetEntity="Wixet\WixetBundle\Entity\ItemContainer")
 	*/
-	protected $main_album;
+	protected $main_item_container;
+	
+	/**
+	* @ORM\OneToOne(targetEntity="Wixet\WixetBundle\Entity\ProfileGroup")
+	*/
+	protected $main_group;
 	
         
     /**
@@ -184,8 +190,8 @@ class UserProfile implements Timestampable
     	return $this->main_private_message_collection;
     }
     
-    public function getMainAlbum() {
-    	return $this->main_album;
+    public function getMainItemContainer() {
+    	return $this->main_item_container;
     }
 
 
@@ -197,21 +203,29 @@ class UserProfile implements Timestampable
         $this->favourites = $favourites;
     }
 
-    public function getAlbums() {
-        return $this->albums;
+    public function getItemContainers() {
+        return $this->item_containers;
     }
 
-    public function setMainAlbum($album) {
-    	$this->main_album = $album;
+    public function setMainItemContainer($ic) {
+    	$this->main_item_container = $ic;
     }
     
     public function setMainPrivateMessageCollection($coll) {
     	$this->main_private_message_collection = $coll;
     }
     
-    public function setAlbums($albums) {
-        $this->albums = $albums;
+    public function setMainGroup($m) {
+    	$this->main_group = $m;
     }
+    
+    public function getMainGroup() {
+    	return $this->main_group;
+    }
+    
+    /*public function setAlbums($albums) {
+        $this->albums = $albums;
+    }*/
 
     public function getCreated() {
         return $this->created;

@@ -8,9 +8,9 @@ use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="album")
+ * @ORM\Table(name="item_container")
  */
-class Album implements Timestampable
+class ItemContainer implements Timestampable
 {
     
     /**
@@ -21,7 +21,7 @@ class Album implements Timestampable
      protected $id;
      
     /**
-     * @ORM\ManyToOne(targetEntity="Wixet\WixetBundle\Entity\UserProfile", inversedBy="albums")
+     * @ORM\ManyToOne(targetEntity="Wixet\WixetBundle\Entity\UserProfile", inversedBy="itemContainers")
      * @ORM\JoinColumn(name="profile_id", referencedColumnName="id", nullable=false)
      */
      protected $profile;
@@ -29,7 +29,7 @@ class Album implements Timestampable
     /**
      * @ORM\Column(type="string")
      */
-    private $title;
+    private $name;
     
     /**
      * @ORM\Column(type="boolean")
@@ -64,12 +64,12 @@ class Album implements Timestampable
         $this->profile = $profile;
     }
 
-    public function getTitle() {
-        return $this->title;
+    public function getName() {
+        return $this->name;
     }
 
-    public function setTitle($title) {
-        $this->title = $title;
+    public function setName($name) {
+        $this->name = $name;
     }
 
     public function getPublic() {

@@ -55,6 +55,10 @@ class ProfileGroup implements Timestampable
     	$this->profiles->add($profile);
     }
     
+    public function removeProfile($profile){
+    	$this->profiles->removeElement($profile);
+    }
+    
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")

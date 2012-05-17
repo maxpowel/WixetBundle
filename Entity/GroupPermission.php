@@ -42,12 +42,12 @@ class GroupPermission
         $this->write_denied = $write_denied;
     }
 
-    public function getRealItemId() {
-        return $this->real_item_id;
+    public function getObjectId() {
+        return $this->object_id;
     }
 
-    public function setRealItemId($real_item_id) {
-        $this->real_item_id = $real_item_id;
+    public function setObjectId($object_id) {
+        $this->object_id = $object_id;
     }
 
     public function getGroup() {
@@ -58,12 +58,12 @@ class GroupPermission
         $this->group = $group;
     }
 
-    public function getAlbum() {
-        return $this->album;
+    public function getOwner() {
+        return $this->owner;
     }
 
-    public function setAlbum($album) {
-        $this->album = $album;
+    public function setOwner($owner) {
+        $this->owner = $owner;
     }
 
     public function getObjectType() {
@@ -116,7 +116,7 @@ class GroupPermission
     /**
      * @ORM\Column(type="integer")
      */
-     protected $real_item_id; 
+     protected $object_id; 
      
      
     /**
@@ -126,17 +126,16 @@ class GroupPermission
      protected $group;
      
      /**
-     * @ORM\ManyToOne(targetEntity="Wixet\WixetBundle\Entity\Album")
-     * @ORM\JoinColumn(name="album_id", referencedColumnName="id", nullable=true)
+     * @ORM\ManyToOne(targetEntity="Wixet\WixetBundle\Entity\UserProfile")
+     * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", nullable=true)
      */
-     protected $album;
-     //When the protected item is an Album, album is null
+     protected $owner;
      
      /**
      * @ORM\ManyToOne(targetEntity="Wixet\WixetBundle\Entity\ObjectType")
      * @ORM\JoinColumn(name="object_type_id", referencedColumnName="id", nullable=false)
      */
-     protected $object_type;
+     protected $objectType;
      
 	
     /**

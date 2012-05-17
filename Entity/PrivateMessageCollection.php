@@ -41,7 +41,7 @@ class PrivateMessageCollection implements Timestampable
     /**
      * @ORM\Column(type="string")
      */
-    private $title;
+    private $name;
 
     
     /**
@@ -81,10 +81,10 @@ class PrivateMessageCollection implements Timestampable
 	}
 
 	/**
-	 * @return the $title
+	 * @return the $name
 	 */
-	public function getTitle() {
-		return $this->title;
+	public function getName() {
+		return $this->name;
 	}
 
 	/**
@@ -123,10 +123,10 @@ class PrivateMessageCollection implements Timestampable
 	}
 
 	/**
-	 * @param field_type $title
+	 * @param field_type $name
 	 */
-	public function setTitle($title) {
-		$this->title = $title;
+	public function setName($name) {
+		$this->name = $name;
 	}
 
 	/**

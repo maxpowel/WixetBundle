@@ -27,6 +27,10 @@ class MimeType
      	return $this->name;
      }
      
+     public function setName($name){
+     	$this->name = $name;
+     }
+     
      public function getId(){
      	return $this->id;
      }

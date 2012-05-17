@@ -41,26 +41,26 @@ class FinalPermission
     /**
      * @ORM\Column(type="integer")
      */
-     protected $real_item_id; 
+     protected $object_id; 
      
-     
-    /**
-     * @ORM\ManyToOne(targetEntity="Wixet\WixetBundle\Entity\ProfileGroup")
-     * @ORM\JoinColumn(name="group_id", referencedColumnName="id", nullable=true)
-     */
-     protected $group;
      
      /**
-     * @ORM\ManyToOne(targetEntity="Wixet\WixetBundle\Entity\Album")
-     * @ORM\JoinColumn(name="album_id", referencedColumnName="id", nullable=true)
+     * @ORM\ManyToOne(targetEntity="Wixet\WixetBundle\Entity\ItemContainer")
+     * @ORM\JoinColumn(name="item_container_id", referencedColumnName="id", nullable=true)
      */
-     protected $album;
+     protected $itemContainer;
      
      /**
      * @ORM\ManyToOne(targetEntity="Wixet\WixetBundle\Entity\UserProfile")
      * @ORM\JoinColumn(name="profile_id", referencedColumnName="id", nullable=false)
      */
      protected $profile;
+     
+     /**
+     * @ORM\ManyToOne(targetEntity="Wixet\WixetBundle\Entity\UserProfile")
+     * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", nullable=false)
+     */
+     protected $owner;
      
      /**
      * @ORM\ManyToOne(targetEntity="Wixet\WixetBundle\Entity\ObjectType")

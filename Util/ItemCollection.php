@@ -7,18 +7,17 @@ class ItemCollection
     private $doctrine;
     private $dbal;
     private $profileId;
-    private $albumId;
+    private $itemContainerId;
     private $objectTypeId;
     private $size = null;
     
-    public function __construct($em,$dbal,$profile, $album, $objectType = null){
+    public function __construct($em,$dbal,$profile, $itemContainer, $objectType = null){
         $this->doctrine = $em;
         $this->dbal = $dbal;
         $this->profileId = $profile->getId();
-        if($album != null)
-        	$this->albumId = "=". $album->getId();
-        else
-        	$this->albumId = " is null ";
+        
+       	$this->itemContainerId = $itemContainer->getId();
+
         
         //Result can be filtered by objectType
         if($objectType == null)
@@ -37,18 +36,18 @@ class ItemCollection
         if($this->size == null){
             $sql = "";
             if($this->objectTypeId == null){
-                $sql = "select count(*) as total from (SELECT DISTINCT fp.real_item_id as id
+                $sql = "select count(*) as total from (SELECT DISTINCT fp.object_id as id
                         FROM final_permission fp
                         JOIN object_type ot on (fp.object_type_id = ot.id)
-                        WHERE profile_id = ".$this->profileId." AND album_id ".$this->albumId."
-                        group by fp.real_item_id,ot.name,fp.profile_id
+                        WHERE profile_id = ".$this->profileId." AND item_container_id = ".$this->itemContainerId."
+                        group by fp.object_id,ot.name,fp.profile_id
                         having sum(read_granted)>0 and sum(read_denied) = 0) tb";
             }else{
-                $sql = "select count(*) as total from (SELECT DISTINCT fp.real_item_id as id
+                $sql = "select count(*) as total from (SELECT DISTINCT fp.object_id as id
                         FROM final_permission fp
                         JOIN object_type ot on (fp.object_type_id = ot.id)
-                        WHERE profile_id = ".$this->profileId." AND album_id ".$this->albumId." AND object_type_id = ".$this->objectTypeId."
-                        group by fp.real_item_id,ot.name,fp.profile_id
+                        WHERE profile_id = ".$this->profileId." AND item_container_id = ".$this->itemContainerId." AND object_type_id = ".$this->objectTypeId."
+                        group by fp.object_id,ot.name,fp.profile_id
                         having sum(read_granted)>0 and sum(read_denied) = 0) tb";
             }
             $stmt = $this->dbal->query($sql);
@@ -78,19 +77,19 @@ class ItemCollection
         
         $sql = "";
         if($this->objectTypeId == null){
-            $sql = "SELECT fp.real_item_id as id, ot.name as object_type
+            $sql = "SELECT fp.object_id as id, ot.name as object_type
                     FROM final_permission fp
                     JOIN object_type ot on (fp.object_type_id = ot.id)
-                    WHERE profile_id = ".$this->profileId." AND album_id ".$this->albumId."
-                    group by fp.real_item_id,ot.name,fp.profile_id
+                    WHERE profile_id = ".$this->profileId." AND item_container_id = ".$this->itemContainerId."
+                    group by fp.object_id,ot.name,fp.profile_id
                     having sum(read_granted)>0 and sum(read_denied) = 0
                     LIMIT ".$limit." OFFSET ".$start;
         }else{
-            $sql = "SELECT fp.real_item_id as id, ot.name as object_type
+            $sql = "SELECT fp.object_id as id, ot.name as object_type
                     FROM final_permission fp
                     JOIN object_type ot on (fp.object_type_id = ot.id)
-                    WHERE profile_id = ".$this->profileId." AND album_id ".$this->albumId." AND object_type_id = ".$this->objectTypeId."
-                    group by fp.real_item_id,ot.name,fp.profile_id
+                    WHERE profile_id = ".$this->profileId." AND item_container_id = ".$this->itemContainerId." AND object_type_id = ".$this->objectTypeId."
+                    group by fp.object_id,ot.name,fp.profile_id
                     having sum(read_granted)>0 and sum(read_denied) = 0
                     LIMIT ".$limit." OFFSET ".$start;
         }

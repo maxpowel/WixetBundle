@@ -19,7 +19,7 @@ class Fetcher
 		    $scapedObjectType = str_replace('\\', '\\\\', $objectType);
             $sql="select sum(read_granted) as read_granted, sum(read_denied) as read_denied
                   FROM final_permission
-                  where profile_id = ".$profile->getId()." AND real_item_id = ".$objectId." AND object_type_id = (select id from object_type where name = '".$scapedObjectType."')";//Or use a join instead subselect
+                  where profile_id = ".$profile->getId()." AND object_id = ".$objectId." AND object_type_id = (select id from object_type where name = '".$scapedObjectType."')";//Or use a join instead subselect
                     
               $stmt = $this->dbal->query($sql);
               $row = $stmt->fetch();
@@ -33,9 +33,9 @@ class Fetcher
             return $this->doctrine->find($objectType, $objectId);
         }
 	
-	public function getCollection($album,$profile,$objectType = null){
+	public function getCollection($itemContainer,$profile,$objectType = null){
             
-            return new ItemCollection($this->doctrine, $this->dbal, $profile, $album, $objectType);
+            return new ItemCollection($this->doctrine, $this->dbal, $profile, $itemContainer, $objectType);
             /*
             $sql="select sum(read_granted) as read_granted, sum(read_denied) as read_denied
                   FROM final_permission

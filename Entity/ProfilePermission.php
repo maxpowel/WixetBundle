@@ -43,12 +43,12 @@ class ProfilePermission
         $this->write_denied = $write_denied;
     }
 
-    public function getRealItemId() {
-        return $this->real_item_id;
+    public function getObjectId() {
+        return $this->object_id;
     }
 
-    public function setRealItemId($real_item_id) {
-        $this->real_item_id = $real_item_id;
+    public function setObjectId($id) {
+        $this->object_id = $id;
     }
 
     public function getProfile() {
@@ -59,20 +59,20 @@ class ProfilePermission
         $this->profile = $profile;
     }
 
-    public function getAlbum() {
-        return $this->album;
+    public function getOwner() {
+        return $this->owner;
     }
 
-    public function setAlbum($album) {
-        $this->album = $album;
+    public function setOwner($owner) {
+        $this->owner = $owner;
     }
 
     public function getObjectType() {
-        return $this->object_type;
+        return $this->objectType;
     }
 
-    public function setObjectType($object_type) {
-        $this->object_type = $object_type;
+    public function setObjectType($objectType) {
+        $this->objectType = $objectType;
     }
 
     public function getObjectCreationTime() {
@@ -114,7 +114,7 @@ class ProfilePermission
     /**
      * @ORM\Column(type="integer")
      */
-     protected $real_item_id; 
+     protected $object_id; 
      
      
     /**
@@ -124,17 +124,16 @@ class ProfilePermission
      protected $profile;
      
      /**
-     * @ORM\ManyToOne(targetEntity="Wixet\WixetBundle\Entity\Album")
-     * @ORM\JoinColumn(name="album_id", referencedColumnName="id", nullable=true)
+     * @ORM\ManyToOne(targetEntity="Wixet\WixetBundle\Entity\UserProfile")
+     * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", nullable=true)
      */
-     protected $album;
-     //When the protected item is an Album, album is null
+     protected $owner;
      
      /**
      * @ORM\ManyToOne(targetEntity="Wixet\WixetBundle\Entity\ObjectType")
      * @ORM\JoinColumn(name="object_type_id", referencedColumnName="id", nullable=false)
      */
-     protected $object_type;
+     protected $objectType;
      
 
      /**

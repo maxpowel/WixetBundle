@@ -126,10 +126,6 @@ class MediaItem implements Timestampable
      protected $id;
 
      
-     /**
-     * @ORM\ManyToOne(targetEntity="Wixet\WixetBundle\Entity\Album", inversedBy="photos")
-     */
-     protected $album;
      
     /**
      * @ORM\ManyToOne(targetEntity="Wixet\WixetBundle\Entity\UserProfile", inversedBy="updates")

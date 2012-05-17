@@ -32,6 +32,7 @@
         <service id="wixet.media_item_manager" class="%wixet.media_item_manager.class%">
           <argument>%wixet.config%</argument>
         </service>
+
     </services>
 </container>
 
