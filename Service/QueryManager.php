@@ -7,12 +7,17 @@ class QueryManager
     
 	private $doctrine;
 	
-	public function __construct($em)
+	public function __construct($em, $security)
 	{
 		$this->doctrine = $em;
+		$this->security = $security;
 	}
 	
 	public function fullSearch($query,$offset = 0, $limit = 10,$filter = null){
+		$extensionIndex = "extensions";
+		$viewer = $this->security->getToken()->getUser()->getProfile();
+		$group = $viewer->getMainGroup();
+		$connection = $this->doctrine->getConnection();
 		//Iniciar daemon 
 		$s = new \SphinxClient();
 		$s->setServer("localhost", 9312);
@@ -22,10 +27,11 @@ class QueryManager
 		
 		$s->setGroupBy("profile_id",SPH_GROUPBY_ATTR);
 		$s->setGroupDistinct("profile_id");
+		$s->setFilter('profile_id',array($viewer->getId()), true);
 		
 		//setlimits(offset,limit, results saved in memory, stop when X results found
 		$s->setLimits($offset,$limit,$limit*10,$limit*100); 
-		$result = $s->query($query, "wixet");
+		$result = $s->query($query, $extensionIndex);
 		
 		
 		$matches = array();
@@ -42,8 +48,22 @@ class QueryManager
 					$match['name'] = $profile->getFirstName()." ".$profile->getLastName();
 					$match['id'] = $profile->getId();
 					$match['thumbnail'] = $profile->getId();
-					$match['group'] = null;
-					$match['city'] = array("name"=> "Palencia", "id"=>1);
+					
+					//Check if user is in the main group
+					$sql = "SELECT count(userprofile_id) as exist from profilegroup_userprofile WHERE profilegroup_id = ". $group->getId() ." AND userprofile_id = ".$profile->getId();
+					$statement = $connection->query($sql);
+					$res = $statement->fetch();
+					if($res['exist'] > 0)
+						$match['group'] = array("name" => $group->getName(), "id" => $group->getId());
+					
+					
+					
+					//City
+					$city = $profile->getCity();
+					if($city)
+						$match['city'] = array("name"=> $city->getName(), "id"=>$city->getId());
+					
+					
 					$match['type'] = 'UserProfile';
 					$match['interests'] = array();
 					
@@ -52,7 +72,7 @@ class QueryManager
 					foreach($profile->getExtensions() as $extension){
 						$h = $s->buildExcerpts(
 							array($extension->getBody()),
-							"wixet",
+							$extensionIndex,
 							$query,
 							array("before_match"=>"[b]",
 								  "after_match"=>"[/b]"

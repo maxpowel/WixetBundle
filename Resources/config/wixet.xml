@@ -27,6 +27,7 @@
         
         <service id="wixet.query_manager" class="%wixet.query_manager.class%">
             <argument type="service" id="doctrine.orm.default_entity_manager" />
+            <argument type="service" id="security.context" />
         </service>
 
         <service id="wixet.media_item_manager" class="%wixet.media_item_manager.class%">

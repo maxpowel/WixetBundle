@@ -173,7 +173,7 @@ class PermissionManager
 	    	"SELECT ai.object_type_id, ai.object_id, gp.read_granted, gp.read_denied, gp.write_granted, gp.write_denied, gp.object_creation_time
 	    	FROM group_permission gp
 	    	JOIN profilegroup_userprofile ghp on (gp.group_id = ghp.profilegroup_id)
-	    	JOIN item_container_has_items ai on ( gp.object_id = ai.id_item_container_id)
+	    	JOIN item_container_has_items ai on ( gp.object_id = ai.item_container_id)
 	    	WHERE ghp.userprofile_id = ".$profile->getId()." AND gp.owner_id = ".$owner->getId()." AND gp.object_type_id = ".$this->itemContainerTypeId." 
 	    	) mtable
 	    
