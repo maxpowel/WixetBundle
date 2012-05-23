@@ -74,6 +74,12 @@ class PermissionManager
     public function setItemContainer($item, $itemContainer){
     	
     	$ot = $this->doctrine->getRepository( 'Wixet\WixetBundle\Entity\ObjectType' )->findOneBy( array( 'name' => get_class($item)));
+    	if($ot == null){
+    		$ot = new \Wixet\WixetBundle\Entity\ObjectType();
+    		$ot->setName(get_class($item));
+    		$this->doctrine->persist($ot);
+    		$this->doctrine->flush();
+    	}
     	
     	$icont = $this->doctrine->getRepository( 'Wixet\WixetBundle\Entity\ItemContainerHasItems' )->findOneBy( array( 'objectType' => $ot->getName(), 'object_id' => $item->getId()));
     	if($icont == null){
