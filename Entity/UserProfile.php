@@ -237,6 +237,9 @@ class UserProfile implements Timestampable
         return $this->updated;
     }
 
+    public function getProfile(){
+    	return $this;
+    }
 
 
 }

@@ -9,6 +9,7 @@
         <parameter key="wixet.media_item_manager.class">Wixet\WixetBundle\Service\MediaItemManager</parameter>
         <parameter key="wixet.fetcher.class">Wixet\WixetBundle\Service\Fetcher</parameter>
         <parameter key="wixet.query_manager.class">Wixet\WixetBundle\Service\QueryManager</parameter>
+        <parameter key="wixet.index_manager.class">Wixet\WixetBundle\Service\IndexManager</parameter>
     </parameters>
 
     <services>
@@ -32,6 +33,10 @@
 
         <service id="wixet.media_item_manager" class="%wixet.media_item_manager.class%">
           <argument>%wixet.config%</argument>
+        </service>
+        
+        <service id="wixet.index_manager" class="%wixet.index_manager.class%">
+          <argument>%index_command%</argument>
         </service>
 
     </services>

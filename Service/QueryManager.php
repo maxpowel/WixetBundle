@@ -25,23 +25,25 @@ class QueryManager
 		$s->setMaxQueryTime(3);
 		
 		
-		$s->setGroupBy("profile_id",SPH_GROUPBY_ATTR);
-		$s->setGroupDistinct("profile_id");
+		//$s->setGroupBy("profile_id",SPH_GROUPBY_ATTR);
+		//$s->setGroupDistinct("profile_id");
+		//Exclude the viewer profile
 		$s->setFilter('profile_id',array($viewer->getId()), true);
 		
 		//setlimits(offset,limit, results saved in memory, stop when X results found
 		$s->setLimits($offset,$limit,$limit*10,$limit*100); 
 		$result = $s->query($query, $extensionIndex);
 		
-		
+		//print_r($result);
 		$matches = array();
 		$matches['total']= $result['total_found'];
 		
 		$matchList = array();
 		if(isset($result["matches"])){
 			$respository = $this->doctrine->getRepository('Wixet\WixetBundle\Entity\UserProfile');
-			foreach($result["matches"] as $result){ //$key is the object id in db
-					$profile = $respository->find($result["attrs"]["profile_id"]);
+			foreach($result["matches"] as $id=>$result){ //$key is the object id in db
+					//$profile = $respository->find($result["attrs"]["profile_id"]);
+					$profile = $respository->find($id);
 					
 					$match = array();
 					

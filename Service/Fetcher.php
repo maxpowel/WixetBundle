@@ -24,9 +24,13 @@ class Fetcher
               $stmt = $this->dbal->query($sql);
               $row = $stmt->fetch();
               if($row['read_granted'] > 0 && $row['read_denied'] == 0){
-              	
               	return $this->doctrine->find($objectType, $objectId);
-              }
+              }/*else{
+              	//Maybe the user is the owner?
+              	$item = $this->doctrine->find($objectType, $objectId);
+              	if($item->getProfile()->getId() == $profile->getId())
+              		return $item;
+              }*/
         }
         
 	public function unsecureGet($objectType,$objectId){
