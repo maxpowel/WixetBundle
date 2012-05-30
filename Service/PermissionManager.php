@@ -18,6 +18,7 @@ class PermissionManager
 	private $dbal;
 	private $itemContainerTypeId;
 	
+
 	public function __construct($em,$config,$dbal)
 	{
 		$this->dbal = $dbal;
@@ -71,6 +72,7 @@ class PermissionManager
     	$this->rebuildFinalPermissionsToProfile($profile, $group->getProfile());
     }
     
+
     public function setItemContainer($item, $itemContainer){
     	
     	$ot = $this->doctrine->getRepository( 'Wixet\WixetBundle\Entity\ObjectType' )->findOneBy( array( 'name' => get_class($item)));
@@ -211,7 +213,8 @@ class PermissionManager
     private function rebuildFinalPermissionsToItem($item){
 
     	//Get object type id
-    	$sql = "SELECT id FROM object_type WHERE name = '".str_replace("\\", "\\\\", get_class($item))."'";
+    	$className = $this->doctrine->getClassMetadata(get_class($item))->name;
+    	$sql = "SELECT id FROM object_type WHERE name = '".str_replace("\\", "\\\\", $className)."'";
     	$st = $this->dbal->query($sql);
     	$objectTypeId = $st->fetch();
     	$objectTypeId = $objectTypeId['id'];
@@ -280,7 +283,8 @@ class PermissionManager
     	//Remove final permissions
     	
     	//Get object type id
-    	$sql = "SELECT id FROM object_type WHERE name = '".str_replace("\\", "\\\\", get_class($item))."'";
+    	$className = $this->doctrine->getClassMetadata(get_class($item))->name;
+    	$sql = "SELECT id FROM object_type WHERE name = '".str_replace("\\", "\\\\", $className)."'";
     	$st = $this->dbal->query($sql);
     	$objectTypeId = $st->fetch();
     	$sql = "DELETE FROM final_permission WHERE profile_id = ".$profile->getId()." AND object_type_id = ". $objectTypeId['id'] ." AND object_id = ".$item->getId();

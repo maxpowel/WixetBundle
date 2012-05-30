@@ -29,7 +29,7 @@ class QueryManager
 		//$s->setGroupDistinct("profile_id");
 		//Exclude the viewer profile
 		$s->setFilter('profile_id',array($viewer->getId()), true);
-		
+		//echo $viewer->getId();
 		//setlimits(offset,limit, results saved in memory, stop when X results found
 		$s->setLimits($offset,$limit,$limit*10,$limit*100); 
 		$result = $s->query($query, $extensionIndex);

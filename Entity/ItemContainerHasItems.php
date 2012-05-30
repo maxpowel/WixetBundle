@@ -42,6 +42,11 @@ class itemContainerHasItems implements Timestampable
      	$this->itemContainer = $itemContainer;
      }
      
+     
+     public function getItemContainer(){
+     	return $this->itemContainer;
+     }
+     
      public function setObjectId($o){
      	$this->object_id = $o;
      }

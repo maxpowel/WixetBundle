@@ -12,13 +12,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
  */
 class MediaItem implements Timestampable
 {
-	public function getAlbum(){
-		return $this->album;
-	}
-	
-	public function setAlbum($album){
-		$this->album = $album;
-	}
 	
     public function getCreated() {
         return $this->created;
