@@ -14,7 +14,7 @@ class xmlCommand extends ContainerAwareCommand
     {
         $this
             ->setName('index:xml')
-            ->setDescription('Get xml for to index')
+            ->setDescription('Get xml for extensions index')
         ;
     }
 

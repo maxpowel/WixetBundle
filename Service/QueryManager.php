@@ -13,6 +13,38 @@ class QueryManager
 		$this->security = $security;
 	}
 	
+	public function contactSearch($profile, $query){
+		$contactsIndex = "contacts";
+		$viewer = $this->security->getToken()->getUser()->getProfile();
+		//Iniciar daemon
+		$s = new \SphinxClient();
+		$s->setServer("localhost", 9312);
+		$s->setMatchMode(SPH_MATCH_ANY);
+		$s->setMaxQueryTime(3);
+		
+		//Search for the viewer
+		$s->setFilter('profile_id',array($viewer->getId()));
+		//echo $viewer->getId();
+		$result = $s->query($query, $contactsIndex);
+		
+		
+		$matchList = array();
+		if(isset($result["matches"])){
+			$respository = $this->doctrine->getRepository('Wixet\WixetBundle\Entity\UserProfile');
+			foreach($result["matches"] as $result){
+				//$key is the object id in db
+				//$profile = $respository->find($result["attrs"]["profile_id"]);
+				$matchList[] = $respository->find($result['attrs']['contact_id']);
+					//
+				
+			}
+		}
+		
+		
+		
+		return $matchList;
+	}
+	
 	public function fullSearch($query,$offset = 0, $limit = 10,$filter = null){
 		$extensionIndex = "extensions";
 		$viewer = $this->security->getToken()->getUser()->getProfile();

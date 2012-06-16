@@ -36,7 +36,8 @@
         </service>
         
         <service id="wixet.index_manager" class="%wixet.index_manager.class%">
-          <argument>%index_command%</argument>
+          <argument>%index_command_extensions%</argument>
+          <argument>%index_command_contacts%</argument>
         </service>
 
     </services>

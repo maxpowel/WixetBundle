@@ -15,12 +15,16 @@ class rebuildCommand extends ContainerAwareCommand
         $this
             ->setName('index:rebuild')
             ->setDescription('Rebuild index')
+        	->addArgument('index', InputArgument::REQUIRED, 'Type: extensions or contacts')
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-    	system($this->getContainer()->getParameter('index_command'));
+    	if($input->getArgument('index') == "extensions")
+    		system($this->getContainer()->getParameter('index_command_extensions'));
+    	elseif($input->getArgument('index') == "contacts")
+    		system($this->getContainer()->getParameter('index_command_contacts'));
     	$output->writeln("Done");
 
     }
