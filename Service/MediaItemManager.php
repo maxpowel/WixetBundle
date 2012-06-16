@@ -25,45 +25,43 @@ class MediaItemManager
 	}
 	
         
-	
-		public function printMediaItemOriginal($mediaItem){
-			$filename = $this->fileDir."/".$mediaItem->getProfile()->getId()."/".$mediaItem->getId();
+		private function printFile($filename, $mediaItem){
 			if(file_exists($filename)) {
-				header('Content-Type: application/octet-stream');
+				$mime = $mediaItem->getMimeType();
+				$name = trim($mediaItem->getTitle());
+				if(strlen($name) > 0){
+					$name .= ".".$mime->getExtension();
+				}else{
+					$name = $mediaItem->getId().".".$mime->getExtension();
+				}
+			
+				header('Content-Type:'.$mime->getName());
+				header('Content-Disposition: attachment; filename="'.$name.'"');
 				ob_clean();
 				flush();
 				readfile($filename);
 			}
 		}
+		public function printMediaItemOriginal($mediaItem){
+			$filename = $this->fileDir."/".$mediaItem->getProfile()->getId()."/original/".$mediaItem->getId();
+			$this->printFile($filename, $mediaItem);
+		}
 	
         public function printMediaItem($mediaItem){
         	$filename = $this->fileDir."/".$mediaItem->getProfile()->getId()."/".$mediaItem->getId();
-        	if(file_exists($filename)) {
-        		header('Content-Type: '.$mediaItem->getMimeType()->getName());
-        		ob_clean();
-        		flush();
-        		readfile($filename);
-        	}
+        	$this->printFile($filename, $mediaItem);
+        	
         }
         
         public function printMediaItemThumbnail($mediaItem){
+        	
         	$filename = $this->fileDir."/".$mediaItem->getProfile()->getId()."/thumbnail/".$mediaItem->getId();
-        	if(file_exists($filename)) {
-        		header('Content-Type: '.$mediaItem->getMimeType()->getName());
-        		ob_clean();
-        		flush();
-        		readfile($filename);
-        	}
+        	$this->printFile($filename, $mediaItem);
         }
         
         public function printProfileThumbnail($mediaItem){
         	$filename = $this->fileDir."/".$mediaItem->getProfile()->getId()."/profile/".$mediaItem->getId();
-        	if(file_exists($filename)) {
-        		header('Content-Type: '.$mediaItem->getMimeType()->getName());
-        		ob_clean();
-        		flush();
-        		readfile($filename);
-        	}
+        	$this->printFile($filename, $mediaItem);
 
         }
         

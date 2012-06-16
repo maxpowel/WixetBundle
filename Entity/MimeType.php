@@ -21,10 +21,23 @@ class MimeType
     /**
      * @ORM\Column(type="string")
      */
-     protected $name; 
+     protected $name;
+
+     /**
+     * @ORM\Column(type="string")
+     */
+     protected $extension;
      
      public function getName(){
      	return $this->name;
+     }
+     
+     public function getExtension(){
+     	return $this->extension;
+     }
+     
+     public function setExtension($ex){
+     	$this->extension = $ex;
      }
      
      public function setName($name){
@@ -34,5 +47,6 @@ class MimeType
      public function getId(){
      	return $this->id;
      }
+     
     
 }

@@ -92,6 +92,10 @@ class MediaItem implements Timestampable
     public function getComments() {
         return $this->comments;
     }
+    
+    public function getTags() {
+    	return $this->tags;
+    }
 
     public function setComments($comments) {
         $this->comments = $comments;
@@ -109,6 +113,7 @@ class MediaItem implements Timestampable
 	public function __construct()
     {
         $this->comments = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->tags = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
@@ -161,12 +166,16 @@ class MediaItem implements Timestampable
      */
      protected $public; 
      
-     
      /**
      * @ORM\OneToMany(targetEntity="Wixet\WixetBundle\Entity\MediaItemComment", fetch="EXTRA_LAZY", mappedBy="media_item")
      * @ORM\OrderBy({"created" = "DESC"})
      */
 	 protected $comments;
+	 
+	 /**
+	 * @ORM\OneToMany(targetEntity="Wixet\WixetBundle\Entity\MediaItemTag", mappedBy="media_item")
+	 */
+	 protected $tags;
 	 
 	 /**
      * @ORM\ManyToOne(targetEntity="Wixet\WixetBundle\Entity\MimeType")

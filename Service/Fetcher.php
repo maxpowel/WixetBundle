@@ -92,6 +92,34 @@ class Fetcher
               }*/
         }
         
+        
+        /* Get if not denied but granted is not required */
+        public function getPassive($objectType,$objectId,$profile){
+        	$scapedObjectType = str_replace('\\', '\\\\', $objectType);
+        	$sql="select sum(read_granted) as read_granted, sum(read_denied) as read_denied
+                          FROM final_permission
+                          where profile_id = ".$profile->getId()." AND object_id = ".$objectId." AND object_type_id = (select id from object_type where name = '".$scapedObjectType."')";//Or use a join instead subselect
+        
+        	$stmt = $this->dbal->query($sql);
+        	$row = $stmt->fetch();
+        	if($row['read_denied'] == 0){
+        		return $this->doctrine->find($objectType, $objectId);
+        	}
+        }
+        
+        public function getWritable($objectType,$objectId,$profile){
+        	$scapedObjectType = str_replace('\\', '\\\\', $objectType);
+        	$sql="select sum(write_granted) as write_granted, sum(write_denied) as write_denied
+                                  FROM final_permission
+                                  where profile_id = ".$profile->getId()." AND object_id = ".$objectId." AND object_type_id = (select id from object_type where name = '".$scapedObjectType."')";//Or use a join instead subselect
+        
+        	$stmt = $this->dbal->query($sql);
+        	$row = $stmt->fetch();
+        	if($row['write_granted'] > 0 && $row['write_denied'] == 0){
+        		return $this->doctrine->find($objectType, $objectId);
+        	}
+        }
+        
 	public function unsecureGet($objectType,$objectId){
             return $this->doctrine->find($objectType, $objectId);
         }
