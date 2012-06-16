@@ -47,7 +47,7 @@ class xmlCommand extends ContainerAwareCommand
     		$sql = "SELECT title,body FROM user_profile_extension WHERE profile_id = ".$p['id'];
     		$statement = $connection->query($sql);
     		while( ($data = $statement->fetch())){
-    			$output->writeln(htmlentities($data['title']." ".$data['body']));
+    			$output->writeln(htmlspecialchars($data['title']." ".$data['body']));
     		}	
     		//End profile extension data
     		
