@@ -20,22 +20,6 @@ class xmlCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-
-    	//Arreglar esto para que funcione con tildes y stopwords y todo eso 
-    	function limpiar($s)
-    	{
-    		$s = strtolower($s);
-    		$s = str_replace("ç","c",$s);
-    		$s = str_replace("ñ","n",$s);
-    		$s = str_replace("á","a",$s);
-    		$s = str_replace("é","e",$s);
-    		$s = str_replace("í","i",$s);
-    		$s = str_replace("ó","o",$s);
-    		$s = str_replace("ú","u",$s);
-    		
-    	
-    		return $s;
-    	}
     	
     	$em = $this->getContainer()->get('doctrine')->getEntityManager();
     	$connection = $em->getConnection();
@@ -63,7 +47,7 @@ class xmlCommand extends ContainerAwareCommand
     		$sql = "SELECT title,body FROM user_profile_extension WHERE profile_id = ".$p['id'];
     		$statement = $connection->query($sql);
     		while( ($data = $statement->fetch())){
-    			$output->writeln(htmlentities(limpiar($data['title']." ".$data['body'])));
+    			$output->writeln(htmlentities($data['title']." ".$data['body']));
     		}	
     		//End profile extension data
     		
