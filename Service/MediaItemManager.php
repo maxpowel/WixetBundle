@@ -18,8 +18,10 @@ class MediaItemManager
            $this->maxPrevWidth = $config['preview_max_size'][0];
            $this->maxPrevHeight = $config['preview_max_size'][1];
            
-           $this->maxProfileWidth = $config['profile_max_size'][0];
-           $this->maxProfileHeight = $config['profile_max_size'][1];
+           $this->maxPublicProfileWidth = $config['public_profile_max_size'][0];
+           $this->maxPublicProfileHeight = $config['public_profile_max_size'][1];
+           
+           $this->maxProfile = $config['profile_max_size'];
 
 
 	}
@@ -60,20 +62,113 @@ class MediaItemManager
         }
         
         public function printProfileThumbnail($mediaItem){
-        	$filename = $this->fileDir."/".$mediaItem->getProfile()->getId()."/profile/".$mediaItem->getId();
-        	$this->printFile($filename, $mediaItem);
+        	$filename = $this->fileDir."/".$mediaItem->getProfile()->getId()."/profile/mini";
+        	readfile($filename);
+        	//$this->printFile($filename, $mediaItem);
 
         }
         
-        public function destoryProfileThumbnail(\Wixet\WixetBundle\Entity\MediaItem $mediaItem){
-            $ownerId = $mediaItem->getUser()->getId();
-            unlink($this->fileDir."/".$ownerId."/profile/".$mediaItem->getId());
+        public function printPublicProfileThumbnail($mediaItem){
+        	$filename = $this->fileDir."/".$mediaItem->getProfile()->getId()."/profile/public";
+        	readfile($filename);
+        	//$this->printFile($filename, $mediaItem);
+        
         }
-        public function doProfileThumbnail(\Wixet\WixetBundle\Entity\MediaItem $mediaItem){
-            //No usada de momento
+        
+        public function destroyProfileThumbnail(\Wixet\WixetBundle\Entity\UserProfile $profile,\Wixet\WixetBundle\Entity\MediaItem $mediaItem){
+            @unlink($this->fileDir."/".$profile->getId()."/profile/mini");
+            @unlink($this->fileDir."/".$profile->getId()."/profile/public");
+        }
+        
+        public function doProfileThumbnail(\Wixet\WixetBundle\Entity\UserProfile $profile, \Wixet\WixetBundle\Entity\MediaItem $mediaItem){
+	        //TODO: hacerlo para videos e imagenes
+	        $fileType = $mediaItem->getMimeType()->getName();
+	        $ownerId = $mediaItem->getProfile()->getId();
+	        if($mediaItem->getMimeType()->getName() == "image/png")
+	        $origen = imagecreatefrompng($this->fileDir."/".$ownerId."/original/".$mediaItem->getId());
+	        elseif($mediaItem->getMimeType()->getName() == "image/jpeg")
+	        $origen = imagecreatefromjpeg($this->fileDir."/".$ownerId."/original/".$mediaItem->getId());
+	        
+	        list($width, $height) = getimagesize($this->fileDir."/".$ownerId."/original/".$mediaItem->getId());
+	        
+	        
+	        //Crear thumb
+	        $thumb = imagecreatetruecolor($this->maxProfile, $this->maxProfile);
+	        
+	        //Redimensionar
+	        imagecopyresized($thumb, $origen, 0, 0, 0, 0, $this->maxProfile, $this->maxProfile, $width, $height);
+	        
+	        
+	        if(!file_exists($this->fileDir."/".$profile->getId()."/profile")){
+	        	if(!@mkdir($this->fileDir."/".$profile->getId()."/profile", 0775, true))
+	        		throw new \Exception("Cannot create media item profile thumbnail directory");
+	        }
+	        	//Guardar archivo
+	        if($mediaItem->getMimeType()->getName() == "image/png")
+	        	imagepng($thumb,$this->fileDir."/".$profile->getId()."/profile/mini");
+	        elseif($mediaItem->getMimeType()->getName() == "image/jpeg")
+	        	imagejpeg($thumb,$this->fileDir."/".$profile->getId()."/profile/mini");
+        
+	        //Crear lo de perfil (que es mas grande)
+	        /**************************************/
+	        if($width > $height){
+	        	//$width rules
+	        	//Calculamos el porcentaje reducido a lo ancho para reducir el mismo porcentaje a lo alto
+	        	$diff = $width - $this->maxPublicProfileWidth;
+	        	if($diff > 0){
+	        		$percent = $diff * 100 / $width;
+	        
+	        		//Final width
+	        		$new_width = $this->maxPublicProfileWidth;
+	        
+	        		//Final height
+	        		$new_height =$height - $percent * $height / 100;
+	        	}else{
+	        		$new_width = $width;
+	        		$new_height = $height;
+	        	}
+	        }else{
+	        	//$height rules
+	        	$diff = $height - $this->maxPublicProfileHeight;
+	        	if($diff > 0){
+	        		$percent = $diff * 100 / $height;
+	        
+	        
+	        		$new_height = $this->maxPublicProfileHeight;
+	        
+	        
+	        		$new_width = $width - $percent * $width / 100;
+	        	}else{
+	        		$new_width = $width;
+	        		$new_height = $height;
+	        	}
+	        }
+	        
+	        //Crear thumb
+	        $thumb = imagecreatetruecolor($new_width, $new_height);
+	        
+	        //Redimensionar
+	        imagecopyresized($thumb, $origen, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
+	        
+	        
+	        if(!file_exists($this->fileDir."/".$profile->getId()."/profile")){
+	        	if(!@mkdir($this->fileDir."/".$profile->getId()."/profile", 0775, true))
+	        	throw new \Exception("Cannot create media item profile thumbnail directory");
+	        }
+	        //Guardar archivo
+	        if($mediaItem->getMimeType()->getName() == "image/png")
+	        	imagepng($thumb,$this->fileDir."/".$profile->getId()."/profile/public");
+	        elseif($mediaItem->getMimeType()->getName() == "image/jpeg")
+	        	imagejpeg($thumb,$this->fileDir."/".$profile->getId()."/profile/public");
+	        
+        
+        
+        }
+        
+        /*public function doProfileThumbnail(\Wixet\WixetBundle\Entity\UserProfile $profile, \Wixet\WixetBundle\Entity\MediaItem $mediaItem){
             //TODO: hacerlo para videos e imagenes
             $fileType = $mediaItem->getMimeType()->getName();
-            $ownerId = $mediaItem->getUser()->getId();
+            $ownerId = $mediaItem->getProfile()->getId();
             if($mediaItem->getMimeType()->getName() == "image/png")
                 $origen = imagecreatefrompng($this->fileDir."/".$ownerId."/original/".$mediaItem->getId());
             elseif($mediaItem->getMimeType()->getName() == "image/jpeg")
@@ -84,12 +179,12 @@ class MediaItemManager
             if($width > $height){
                 //$width rules
                 //Calculamos el porcentaje reducido a lo ancho para reducir el mismo porcentaje a lo alto
-                $diff = $width - $this->maxProfileWidth;
+                $diff = $width - $this->maxProfile;
                 if($diff > 0){
                     $percent = $diff * 100 / $width;
 
                     //Final width
-                    $new_width = $this->maxProfileWidth;
+                    $new_width = $this->maxProfile;
 
                     //Final height
                     $new_height =$height - $percent * $height / 100;
@@ -99,12 +194,12 @@ class MediaItemManager
                 }
             }else{
                 //$height rules
-                $diff = $height - $this->maxProfileHeight;
+                $diff = $height - $this->maxProfile;
                 if($diff > 0){
                     $percent = $diff * 100 / $height;
 
                     
-                    $new_height = $this->maxProfileHeight;
+                    $new_height = $this->maxProfile;
 
                     
                     $new_width = $width - $percent * $width / 100;
@@ -121,19 +216,19 @@ class MediaItemManager
             imagecopyresized($thumb, $origen, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
 
                         
-            if(!file_exists($this->fileDir."/".$ownerId."/profile")){
-                if(!@mkdir($this->fileDir."/".$ownerId."/profile", 0775, true))
+            if(!file_exists($this->fileDir."/".$profile->getId()."/profile")){
+                if(!@mkdir($this->fileDir."/".$profile->getId()."/profile", 0775, true))
                         throw new \Exception("Cannot create media item profile thumbnail directory");
             }
             //Guardar archivo
             if($mediaItem->getMimeType()->getName() == "image/png")
-                imagepng($thumb,$this->fileDir."/".$ownerId."/profile/".$mediaItem->getId());
+                imagepng($thumb,$this->fileDir."/".$profile->getId()."/profile/".$mediaItem->getId());
             elseif($mediaItem->getMimeType()->getName() == "image/jpeg")
-                imagejpeg($thumb,$this->fileDir."/".$ownerId."/profile/".$mediaItem->getId());
+                imagejpeg($thumb,$this->fileDir."/".$profile->getId()."/profile/".$mediaItem->getId());
             
 
             
-        }
+        }*/
         
 	    public function saveFile($filePath, \Wixet\WixetBundle\Entity\MediaItem $mediaItem){
             //TODO: hacerlo para videos e imagenes
@@ -201,7 +296,7 @@ class MediaItemManager
             
             imagedestroy($thumb);
             list($width, $height) = getimagesize($filePath);
-
+/*
             if($width > $height){
                 //$width rules
                 //Calculamos el porcentaje reducido a lo ancho para reducir el mismo porcentaje a lo alto
@@ -253,10 +348,10 @@ class MediaItemManager
                 imagejpeg($thumb,$this->fileDir."/".$ownerId."/profile/".$mediaItem->getId());
             
             imagedestroy($thumb);
-            
+            */
             
             //La de perfil          
-            //TODO: Hacer que sólo se cree cuando se necesita
+            //En principio se hace cuando se necesita
             //$this->doProfileThumbnail($mediaItem);
             
             

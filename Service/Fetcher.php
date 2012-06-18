@@ -63,7 +63,8 @@ class Fetcher
 	}
 	
 	public function getItemContainer($item){
-		$ot = $this->doctrine->getRepository( 'Wixet\WixetBundle\Entity\ObjectType' )->findOneBy( array( 'name' => get_class($item)));
+		$className = $this->doctrine->getClassMetadata(get_class($item))->name;
+		$ot = $this->doctrine->getRepository( 'Wixet\WixetBundle\Entity\ObjectType' )->findOneBy( array( 'name' => $className));
 		 
 		 
 		$query = $this->doctrine->createQuery('SELECT h FROM Wixet\WixetBundle\Entity\ItemContainerHasItems h JOIN h.itemContainer ic WHERE h.object_id = ?1 AND h.objectType= ?2');

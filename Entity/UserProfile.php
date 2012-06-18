@@ -20,7 +20,6 @@ class UserProfile implements Timestampable
         $this->extensions = new \Doctrine\Common\Collections\ArrayCollection();
         $this->itemContainers = new \Doctrine\Common\Collections\ArrayCollection();
         $this->profile_groups = new \Doctrine\Common\Collections\ArrayCollection();
-        
     }
     
     /**
@@ -94,6 +93,11 @@ class UserProfile implements Timestampable
 	*/
 	protected $main_group;
 	
+	/**
+     * @ORM\ManyToOne(targetEntity="Wixet\WixetBundle\Entity\MediaItem", inversedBy="id")
+     * @ORM\JoinColumn(name="main_media_item_id", referencedColumnName="id")
+     */
+	protected $main_media_item;
         
     /**
      * @ORM\ManyToMany(targetEntity="Wixet\WixetBundle\Entity\ProfileGroup", mappedBy="profiles")
@@ -239,6 +243,14 @@ class UserProfile implements Timestampable
 
     public function getProfile(){
     	return $this;
+    }
+    
+    public function setMainMediaItem($item){
+    	$this->main_media_item = $item;
+    }
+    
+    public function getMainMediaItem(){
+    	return $this->main_media_item; 
     }
 
 
