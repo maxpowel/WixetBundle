@@ -66,12 +66,21 @@ class FinalPermission
      * @ORM\ManyToOne(targetEntity="Wixet\WixetBundle\Entity\ObjectType")
      * @ORM\JoinColumn(name="object_type_id", referencedColumnName="id", nullable=false)
      */
-     protected $object_type;
+     protected $objectType;
      
 	
     /**
      * @ORM\Column(type="date")
      */
      protected $object_creation_time; 
+     
+     
+     public function getReadGranted(){
+     	return $this->read_granted;
+     }
+     
+     public function getReadDenied(){
+     	return $this->read_denied;
+     }
     
 }

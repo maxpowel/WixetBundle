@@ -11,6 +11,10 @@ use Doctrine\ORM\Mapping as ORM;
 class ProfilePermission
 {
     
+	public function getId() {
+		return $this->id;
+	}
+	
     public function getReadGranted() {
         return $this->read_granted;
     }

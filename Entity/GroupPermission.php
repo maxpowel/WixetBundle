@@ -67,11 +67,11 @@ class GroupPermission
     }
 
     public function getObjectType() {
-        return $this->object_type;
+        return $this->objectType;
     }
 
     public function setObjectType($object_type) {
-        $this->object_type = $object_type;
+        $this->objectType = $object_type;
     }
 
     public function getObjectCreationTime() {

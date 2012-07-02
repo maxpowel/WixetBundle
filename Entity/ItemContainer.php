@@ -88,5 +88,5 @@ class ItemContainer implements Timestampable
     public function getUpdated() {
         return $this->updated;
     }
-
+    
 }
