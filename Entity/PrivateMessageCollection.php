@@ -29,7 +29,7 @@ class PrivateMessageCollection implements Timestampable
 
 	/**
      * @ORM\ManyToOne(targetEntity="Wixet\WixetBundle\Entity\UserProfile", inversedBy="private_messages_collections")
-     * @ORM\JoinColumn(name="profile_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="profile_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
      protected $profile;
      

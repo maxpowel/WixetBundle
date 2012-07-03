@@ -121,19 +121,19 @@ class GroupPermission
      
     /**
      * @ORM\ManyToOne(targetEntity="Wixet\WixetBundle\Entity\ProfileGroup")
-     * @ORM\JoinColumn(name="group_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="group_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
      protected $group;
      
      /**
      * @ORM\ManyToOne(targetEntity="Wixet\WixetBundle\Entity\UserProfile")
-     * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", nullable=true)
+     * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
      */
      protected $owner;
      
      /**
      * @ORM\ManyToOne(targetEntity="Wixet\WixetBundle\Entity\ObjectType")
-     * @ORM\JoinColumn(name="object_type_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="object_type_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
      protected $objectType;
      

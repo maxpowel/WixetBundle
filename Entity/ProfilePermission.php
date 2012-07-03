@@ -129,7 +129,7 @@ class ProfilePermission
      
      /**
      * @ORM\ManyToOne(targetEntity="Wixet\WixetBundle\Entity\UserProfile")
-     * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", nullable=true)
+     * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
      */
      protected $owner;
      

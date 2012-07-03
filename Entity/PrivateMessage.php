@@ -22,13 +22,13 @@ class PrivateMessage implements Timestampable
      
     /**
      * @ORM\ManyToOne(targetEntity="Wixet\WixetBundle\Entity\UserProfile")
-     * @ORM\JoinColumn(name="profile_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="profile_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
      protected $profile;
      
     /**
      * @ORM\ManyToOne(targetEntity="Wixet\WixetBundle\Entity\UserProfile")
-     * @ORM\JoinColumn(name="author_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="author_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
      private $author;
     
@@ -55,7 +55,7 @@ class PrivateMessage implements Timestampable
      
      /**
      * @ORM\ManyToOne(targetEntity="Wixet\WixetBundle\Entity\PrivateMessageCollection", inversedBy="messages")
-     * @ORM\JoinColumn(name="private_message_collection_id", referencedColumnName="id", nullable=true)
+     * @ORM\JoinColumn(name="private_message_collection_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
      */
      private $private_message_collection;
     

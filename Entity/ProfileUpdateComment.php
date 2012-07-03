@@ -21,13 +21,13 @@ class ProfileUpdateComment implements Timestampable
      
      /**
      * @ORM\ManyToOne(targetEntity="Wixet\WixetBundle\Entity\ProfileUpdate", inversedBy="profile_update")
-     * @ORM\JoinColumn(name="profile_update_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="profile_update_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
      protected $profile_update;
      
     /**
      * @ORM\ManyToOne(targetEntity="Wixet\WixetBundle\Entity\UserProfile")
-     * @ORM\JoinColumn(name="author_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="author_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
     private $author;
     

@@ -50,6 +50,7 @@ class ItemCollection
                         group by fp.object_id,ot.name,fp.profile_id
                         having sum(read_granted)>0 and sum(read_denied) = 0) tb";
             }
+            
             $stmt = $this->dbal->query($sql);
             $res = $stmt->fetch();
             $this->size = $res['total'];
@@ -63,7 +64,6 @@ class ItemCollection
         //$res = $this->getRaw($start,$limit);
         //if(count($res) ==)
         $result = $this->getRaw($start,$limit);
-        
         while( ($item = $result->fetch()) ){
         	//echo $item['object_type'];
         	//echo $item['id'];

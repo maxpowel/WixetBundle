@@ -14,14 +14,14 @@ class ItemContainerCacheInfo
     /**
      * @ORM\Id
      * @ORM\ManyToOne(targetEntity="Wixet\WixetBundle\Entity\UserProfile")
-     * @ORM\JoinColumn(name="profile_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="profile_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
      protected $profile;
      
      /**
      * @ORM\Id
      * @ORM\ManyToOne(targetEntity="Wixet\WixetBundle\Entity\ItemContainer")
-     * @ORM\JoinColumn(name="item_container_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="item_container_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
      protected $itemContainer;
      

@@ -46,19 +46,19 @@ class FinalPermission
      
      /**
      * @ORM\ManyToOne(targetEntity="Wixet\WixetBundle\Entity\ItemContainer")
-     * @ORM\JoinColumn(name="item_container_id", referencedColumnName="id", nullable=true)
+     * @ORM\JoinColumn(name="item_container_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
      */
      protected $itemContainer;
      
      /**
      * @ORM\ManyToOne(targetEntity="Wixet\WixetBundle\Entity\UserProfile")
-     * @ORM\JoinColumn(name="profile_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="profile_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
      protected $profile;
      
      /**
      * @ORM\ManyToOne(targetEntity="Wixet\WixetBundle\Entity\UserProfile")
-     * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
      protected $owner;
      

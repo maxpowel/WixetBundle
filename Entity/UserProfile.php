@@ -31,7 +31,7 @@ class UserProfile implements Timestampable
      
     /**
      * @ORM\OneToOne(targetEntity="Wixet\WixetBundle\Entity\User", inversedBy="profile")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
      protected $user;
     

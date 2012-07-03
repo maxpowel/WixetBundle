@@ -247,6 +247,7 @@ class PermissionManager
     	$query = $this->doctrine->createQuery('DELETE FROM Wixet\WixetBundle\Entity\ItemContainerCacheInfo p WHERE p.profile = ?1');
     	$query->setParameter(1,$profile);
     	$query->execute();
+    	
     }
     
     private function invalidateProfileItemContainerPermission($profile,$itemContainer){
