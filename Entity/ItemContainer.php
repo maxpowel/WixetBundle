@@ -34,7 +34,7 @@ class ItemContainer implements Timestampable
     /**
      * @ORM\Column(type="boolean")
      */
-     protected $public; 
+     protected $public = false; 
     
     /**
      * @var datetime $created

@@ -38,13 +38,28 @@ class Vote
      /**
      * @ORM\Column(type="boolean")
      */
-     protected $like;
+     protected $ylike;
+     
+     /**
+     * @ORM\Column(type="boolean")
+     */
+     protected $dlike;
      
      
      public function getId() {
      	return $this->id;
      }
      
+     
+     public function getObjectType() {
+     	return $this->objectType;
+     }
+      
+     public function setObjectType($ot) {
+     	$this->objectType = $ot;
+     }
+     	
+     	
      public function getObjectId() {
      	return $this->object_id;
      }
@@ -62,11 +77,19 @@ class Vote
      }
      
      public function setLike($val) {
-     	$this->like = $val;
+     	$this->ylike = $val;
      }
      
      public function getLike() {
-     	return $this->like;
+     	return $this->ylike;
+     }
+     
+     public function setDontLike($val) {
+     	$this->dlike = $val;
+     }
+      
+     public function getDontLike() {
+     	return $this->dlike;
      }
     
 }

@@ -219,6 +219,7 @@ class Fetcher
 		$query = $this->doctrine->createQuery('SELECT ot FROM Wixet\WixetBundle\Entity\ObjectType ot WHERE ot.name = ?1');
 		$query->setParameter(1,$objectType);
 		$ot = $query->getSingleResult();
+		
 			
 		//Remove final permissions for this profile/item
 		$query = $this->doctrine->createQuery('DELETE FROM Wixet\WixetBundle\Entity\FinalPermission p WHERE p.profile = ?1 AND p.objectType = ?2 and p.object_id = ?3');

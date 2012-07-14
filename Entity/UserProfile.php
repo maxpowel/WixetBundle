@@ -89,6 +89,11 @@ class UserProfile implements Timestampable
 	protected $main_item_container;
 	
 	/**
+	* @ORM\OneToOne(targetEntity="Wixet\WixetBundle\Entity\ItemContainer")
+	*/
+	protected $root_item_container;
+	
+	/**
 	* @ORM\OneToOne(targetEntity="Wixet\WixetBundle\Entity\ProfileGroup")
 	*/
 	protected $main_group;
@@ -213,6 +218,14 @@ class UserProfile implements Timestampable
 
     public function setMainItemContainer($ic) {
     	$this->main_item_container = $ic;
+    }
+    
+    public function setRootItemContainer($ic) {
+    	$this->root_item_container = $ic;
+    }
+    
+    public function getRootItemContainer() {
+    	return $this->root_item_container;
     }
     
     public function setMainPrivateMessageCollection($coll) {
