@@ -82,5 +82,13 @@ class FinalPermission
      public function getReadDenied(){
      	return $this->read_denied;
      }
+     
+     public function getWriteGranted(){
+     	return $this->write_granted;
+     }
+      
+     public function getWriteDenied(){
+     	return $this->write_denied;
+     }
     
 }

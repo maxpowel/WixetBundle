@@ -21,7 +21,7 @@ class Calendar implements Timestampable
      
     /**
      * @ORM\ManyToOne(targetEntity="Wixet\WixetBundle\Entity\UserProfile")
-     * @ORM\JoinColumn(name="profile_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="profile_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
      protected $profile;
      

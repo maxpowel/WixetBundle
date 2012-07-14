@@ -314,6 +314,7 @@ class PermissionManager
     	$query->setParameter(2, $ot);
     	$query->setParameter(3, $profile);
     	$profilePermission = null;
+    	
     	try{
     		$profilePermission = $query->getSingleResult();
     		
@@ -347,6 +348,13 @@ class PermissionManager
     		}
     		
     	}
+    	//Remove permission if is null
+    	if( !$permission['readGranted'] && !$permission['readDenied'] && !$permission['writeGranted'] && !$permission['writeDenied'] ){
+    		//Null permission, remove it
+    		$this->doctrine->remove($profilePermission);
+    		$this->doctrine->flush();
+    	} 
+    	
     }
     
     /* Create or update the GroupPermission doctrine entity */
@@ -394,6 +402,13 @@ class PermissionManager
     		$this->doctrine->persist($groupPermission);
     		$this->doctrine->flush();
     	}
+    	
+    	//Remove permission if is null
+    	if( !$permission['readGranted'] && !$permission['readDenied'] && !$permission['writeGranted'] && !$permission['writeDenied'] ){
+    		//Null permission, remove it
+    		$this->doctrine->remove($groupPermission);
+    		$this->doctrine->flush();
+    	}
     }
     
     /* Set permission to profile/itemContainer (which is inherited to the container contents) */
@@ -406,6 +421,36 @@ class PermissionManager
     	//$this->rebuildFinalPermissionsToProfileItemContainer($profile, $itemContainer);
     }
     
+    
+    
+    /* Set permission to profile/itemContainer (which is inherited to the container contents) */
+    public function unprotect($item){
+    	$ot = $this->getObjectType($item);
+    	//Profile permission
+    	$query = $this->doctrine->createQuery('DELETE FROM Wixet\WixetBundle\Entity\ProfilePermission p WHERE p.object_id = ?1 AND p.objectType = ?2');
+    	$query->setParameter(1, $item->getId());
+    	$query->setParameter(2, $ot);
+    	$query->execute();
+    	//Group permission
+    	$query = $this->doctrine->createQuery('DELETE FROM Wixet\WixetBundle\Entity\GroupPermission p WHERE p.object_id = ?1 AND p.objectType = ?2');
+    	$query->setParameter(1, $item->getId());
+    	$query->setParameter(2, $ot);
+    	$query->execute();
+    	
+    	//Remove all final permissions
+    	$query = $this->doctrine->createQuery('DELETE FROM Wixet\WixetBundle\Entity\FinalPermission p WHERE p.object_id = ?1 AND p.objectType = ?2');
+    	$query->setParameter(1, $item->getId());
+    	$query->setParameter(2, $ot);
+    	$query->execute();
+    	
+    	//Remove item container cache permissions
+    	if($this->itemContainerClass == $ot->getName()){
+	    	$query = $this->doctrine->createQuery('DELETE FROM Wixet\WixetBundle\Entity\ItemContainerCacheInfo p WHERE p.itemContainer = ?1');
+	    	$query->setParameter(1,$item);
+	    	$query->execute();
+    	}
+    
+    }
   
     
     

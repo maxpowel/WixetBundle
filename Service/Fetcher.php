@@ -94,7 +94,8 @@ class Fetcher
 			
 	}
 
-	public function get($objectType,$objectId,$profile, $count = 0){
+	/* $writable flag when want fetch only if writable */
+	public function get($objectType,$objectId,$profile, $writable = false, $count = 0){
 		if($count >= 2){
 			//throw new \Exception("Loop detected");
 			return null;
@@ -108,7 +109,11 @@ class Fetcher
 		try{
 			$res = $query->getSingleResult();
 				
-			if($res->getReadGranted() > 0 && $res->getReadDenied() == 0){
+			if($writable){
+				if($res->getWriteGranted() > 0 && $res->getWriteDenied() == 0){
+					return $this->doctrine->find($objectType, $objectId);
+				}
+			}else if($res->getReadGranted() > 0 && $res->getReadDenied() == 0){
 				return $this->doctrine->find($objectType, $objectId);
 			}
 		}catch (\Doctrine\ORM\NoResultException $e){
@@ -116,7 +121,7 @@ class Fetcher
 			//echo "FALLO CACHE: objecto ".$objectId."\n";
 			$this->buildItemProfileCachePermissions($objectType, $objectId, $profile);
 			$count = $count + 1;
-			return $this->get($objectType, $objectId, $profile, $count);
+			return $this->get($objectType, $objectId, $profile, $writable, $count);
 		}
 
 	}

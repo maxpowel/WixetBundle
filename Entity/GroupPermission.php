@@ -133,7 +133,7 @@ class GroupPermission
      
      /**
      * @ORM\ManyToOne(targetEntity="Wixet\WixetBundle\Entity\ObjectType")
-     * @ORM\JoinColumn(name="object_type_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
+     * @ORM\JoinColumn(name="object_type_id", referencedColumnName="id", nullable=false)
      */
      protected $objectType;
      
