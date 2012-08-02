@@ -75,6 +75,20 @@ class MediaItemManager
         
         }
         
+        public function printDefaultPublicProfileThumbnail(){
+        	$filename = "../src/Wixet/UserInterfaceBundle/Resources/public/img/50x50.png";
+        	readfile($filename);
+        	//$this->printFile($filename, $mediaItem);
+        
+        }
+        
+        public function printDefaultProfileThumbnail(){
+        	$filename = "../src/Wixet/UserInterfaceBundle/Resources/public/img/180x180.png";
+        	readfile($filename);
+        	//$this->printFile($filename, $mediaItem);
+        
+        }
+        
         public function destroyProfileThumbnail(\Wixet\WixetBundle\Entity\UserProfile $profile,\Wixet\WixetBundle\Entity\MediaItem $mediaItem){
             @unlink($this->fileDir."/".$profile->getId()."/profile/mini");
             @unlink($this->fileDir."/".$profile->getId()."/profile/public");

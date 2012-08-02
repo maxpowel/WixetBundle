@@ -110,6 +110,7 @@ class PermissionManager
     	$ot = $this->getObjectType($item);
     	$oldItemContainer = $this->getItemContainer($item);
     	
+    	//Get relation item:itemContainer
     	$query = $this->doctrine->createQuery('SELECT h FROM Wixet\WixetBundle\Entity\ItemContainerHasItems h JOIN h.itemContainer ic WHERE h.object_id = ?1 AND h.objectType= ?2');
     	$query->setParameter(1,$item->getId());
     	$query->setParameter(2,$ot);
@@ -133,9 +134,11 @@ class PermissionManager
     	//echo "BUSCANDO POR ".$item->getId()." ".$ot->getName()."\n";
     	try{
     		$result = $query->getSingleResult();
-    		$icont->setItemContainer($itemContainer);
+    		//Update the ownership relation
+    		$result->setItemContainer($itemContainer);
     		$this->doctrine->flush();
     	}catch(\Doctrine\ORM\NoResultException $e){
+    		//Relation does not exist because if the first time and item has not itemContainer assigned
     		$icont = new \Wixet\WixetBundle\Entity\ItemContainerHasItems();
     		$icont->setObjectType($ot);
     		$icont->setObjectId($item->getId());
@@ -147,7 +150,8 @@ class PermissionManager
     	
     	$this->invalidateItemPermission($item);
     	$this->invalidateItemContainerPermission($itemContainer);
-    	$this->invalidateItemContainerPermission($oldItemContainer);
+    	if($oldItemContainer != null)
+    		$this->invalidateItemContainerPermission($oldItemContainer);
     	
     }
     

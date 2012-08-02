@@ -144,7 +144,7 @@ class MediaItem implements Timestampable
      /**
      * @ORM\Column(type="integer")
      */
-     protected $file_size; 
+     protected $file_size = 0; 
      
      /**
      * @ORM\Column(type="string", nullable=true)
@@ -154,17 +154,17 @@ class MediaItem implements Timestampable
      /**
      * @ORM\Column(type="integer")
      */
-     protected $views; 
+     protected $views = 0; 
      
      /**
      * @ORM\Column(type="boolean")
      */
-     protected $disabled; 
+     protected $disabled = false; 
      
      /**
      * @ORM\Column(type="boolean")
      */
-     protected $public; 
+     protected $public = false; 
      
      /**
      * @ORM\OneToMany(targetEntity="Wixet\WixetBundle\Entity\MediaItemComment", fetch="EXTRA_LAZY", mappedBy="media_item")

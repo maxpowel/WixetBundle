@@ -91,6 +91,11 @@ class UserProfile implements Timestampable
 	/**
 	* @ORM\OneToOne(targetEntity="Wixet\WixetBundle\Entity\ItemContainer")
 	*/
+	protected $updates_item_container;
+	
+	/**
+	* @ORM\OneToOne(targetEntity="Wixet\WixetBundle\Entity\ItemContainer")
+	*/
 	protected $root_item_container;
 	
 	/**
@@ -203,6 +208,9 @@ class UserProfile implements Timestampable
     	return $this->main_item_container;
     }
 
+    public function getUpdatesItemContainer() {
+    	return $this->updates_item_container;
+    }
 
     public function getFavourites() {
         return $this->favourites;
@@ -218,6 +226,10 @@ class UserProfile implements Timestampable
 
     public function setMainItemContainer($ic) {
     	$this->main_item_container = $ic;
+    }
+    
+    public function setUpdatesItemContainer($ic) {
+    	$this->updates_item_container = $ic;
     }
     
     public function setRootItemContainer($ic) {
