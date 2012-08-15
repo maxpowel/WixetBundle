@@ -83,7 +83,7 @@ class Event
       	
       	$entity = $args->getEntity();
       	$entityManager = $args->getEntityManager();
-      	$className = get_class($entity);
+      	$className = $entityManager->getClassMetadata(get_class($entity))->name;
       	
 		$saveEvent = false;
       	if($className != "Wixet\WixetBundle\Entity\ObjectType" && $className != "Wixet\WixetBundle\Entity\Event"){
@@ -114,7 +114,7 @@ class Event
 	      			$objectType = new \Wixet\WixetBundle\Entity\ObjectType();
 	      			$objectType->setName($className);
 	      			$entityManager->persist($objectType);
-	      			$entityManager->flush();
+	      			//$entityManager->flush();
 	      		}
 	      		
 	      		
