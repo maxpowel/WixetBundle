@@ -91,15 +91,14 @@ class Event
       		
 	      	$event = new \Wixet\WixetBundle\Entity\Event();
 	      	
-	      	/* Private message */
+	      	
 	      	if($entity instanceof \Wixet\WixetBundle\Entity\PrivateMessage){
+	      		/* Private message */
 	      		$saveEvent = true;
 	      		$event->setProfile($entity->getProfile());
 	      		$entityManager->persist($event);
-	      	}
-	      	
-	      	/* Newness */
-	      	if($entity instanceof \Wixet\WixetBundle\Entity\Newness){
+	      	}elseif($entity instanceof \Wixet\WixetBundle\Entity\Newness){
+	      		/* Newness */
 	      		$saveEvent = true;
 	      		$profile = $entity->getProfile();
 	      		$author = $entity->getAuthor();

@@ -79,16 +79,24 @@ class PermissionManager
     
     /* Remove all permissions of a profile (when a profile removes an user from all groups for example) */
     public function unbindProfile($profileOwner, $profileVisitor){
-    	$group->removeProfile($profile);
     	$this->doctrine->flush();
     	
-    	$query = $this->doctrine->createQuery('DELETE FROM Wixet\WixetBundle\Entity\ProfilePermission p WHERE p.owner = ?1 AND p.profile = ?1');
+    	$query = $this->doctrine->createQuery('DELETE FROM Wixet\WixetBundle\Entity\ProfilePermission p WHERE p.owner = ?1 AND p.profile = ?2');
     	$query->setParameter(1,$profileOwner);
-    	$query->setParameter(1,$profileVisitor);
+    	$query->setParameter(2,$profileVisitor);
     	$query->execute();
     
-    	 
-    	$this->invalidateProfilePermission($profile);
+    	//Remove notifications
+    	$objectType = $this->doctrine->getRepository('Wixet\WixetBundle\Entity\ObjectType')->findOneBy(array('name' => 'VirtualUserMainGroup'));
+    	$query = $this->doctrine->createQuery('DELETE FROM Wixet\WixetBundle\Entity\Event e WHERE e.profile = ?1 AND e.objectId = ?2 AND e.objectType = ?3');
+    	$query->setParameter(1,$profileVisitor);
+    	$query->setParameter(2,$profileOwner->getId());
+    	$query->setParameter(3,$objectType);
+    	$query->execute();
+    	
+    	
+    	
+    	$this->invalidateProfilePermission($profileVisitor);
     }
     
     public function getItemContainer($item){

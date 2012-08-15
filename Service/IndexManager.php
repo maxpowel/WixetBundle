@@ -21,10 +21,10 @@ class IndexManager
 		else 
 			throw new \Exception("Index must be specified");
 		
-		if($res != 0){
+		/*if($res != 0){
 			exec('whoami',$output);
 			throw new \Exception("Index cannot be rebuild. Please be sure that the command provided '".$this->indexCommand."' is right and the user '".$output[0]."' has permissions");
-		}
+		}*/
 	}
 	
 	public function __toString()
